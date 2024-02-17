@@ -2,14 +2,20 @@
 <html>
     <head>
         <title>Producer</title>
+        <link rel="stylesheet" type="text/css" href="group.css">
     </head>
-    <header class = "flexbox-header">
-        <button type="menu"><img src="menu.png" alt="menubutton" height="50px" width="50px"></button>
-        <img> <!--This is what the hamburger image should be, but it should probably be a link or button instead of an img-->
-        <h1>Radio Station</h1>
+    <div class = "header">
+        <div class="left">
+            <button type="menu"><img src="menu.png" alt="menubutton" height="50px" width="50px"></button>
+        </div>
+        <div class="middle">
+            <h1>Radio Station</h1>
+        </div>
+        <div class="right">
+            <button type="button">Login</button>
+        </div>
         <!--This should be the button for where people can log in or sign up.-->
-        <button type="button">Login</button>
-    </header>
+    </div>
     <div>
         <!--Drop downs for DJ and Available Time Slot go here-->
         <!--Probably best to have a button for people to select that will let them pick the timeslot-->
@@ -65,7 +71,7 @@
             </ul>
         </nav>
     </div>
-    <footer>
+    <footer class="footer">
         <!--This is the footer. It will hold contact information.-->
         <p>This is the contact information for the website. Phone calls and emails would go here.</p>
     </footer>
