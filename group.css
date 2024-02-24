@@ -5,19 +5,23 @@
     display: table;
     width: 100%;
     table-layout: fixed;
+    
 }
 .header > div {
     display: table-cell;
+    background:red
 }
-.left {
-    background: red;
-}
+/*.left {
+    /*background: red;
+}*/
 .middle {
-    background: green;
+    text-align: center;
     width: 500px;
 }
 .right {
-    background: red;
+    position:absolute;
+    top: 0;
+    right:0;
 }
 .footer {
     position:absolute;
