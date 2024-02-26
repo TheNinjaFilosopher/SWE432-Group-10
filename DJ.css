@@ -1,0 +1,91 @@
+/*css styles specific to the DJ page*/
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full height of the viewport */
+}
+
+h2{
+    font-size: 1em;
+}
+
+.main{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+.section {
+    box-sizing: border-box;
+    flex: 1;
+    float: left;
+    height: 100%; /* Full height of the viewport */
+    border: 1px solid #d3d3d3;
+ 
+    display: flex;
+    flex-direction: column;
+}
+
+.sectionheader {
+    text-align: center;
+    font-size: 1em;
+    padding-bottom: 10px;
+    border: 1px solid #d3d3d3;
+    height: 10%;
+}
+
+.sectioncontent {
+    text-align: center;
+    height: 80%;
+    background-color: #d3d3d3;
+    float: left;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.sectionfooter {
+    padding-top: 20px;
+    text-align: center;
+    height: 10%;
+    
+}
+
+.timeslot {
+    border: 1px solid #d3d3d3;
+    background-color: #f3f2f2;
+    height: 20%;
+    width: 100%;
+    text-align: center;
+}
+
+.editbutton {
+    background-color: #5ddddd;
+    width: 30%;
+    height: 50%;
+}
+
+.songtext {
+    text-align: center;
+    background-color: #c5c0c0;
+    border: 1px solid #d3d3d3;
+    margin: 0;
+    height: 10%;
+    width: 100%;
+}
+
+.timeslot:hover, .editbutton:hover {
+    background-color: #888888;
+}
+
+.timeslot:active, .editbutton:active {
+    background-color: #ffffff;
+}
+
+.footer{
+    position: relative;
+}
