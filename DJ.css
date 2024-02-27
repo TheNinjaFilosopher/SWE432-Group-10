@@ -9,6 +9,7 @@ body {
 
 h2{
     font-size: 1em;
+    margin: 5px;
 }
 
 .main{
@@ -24,14 +25,13 @@ h2{
     box-sizing: border-box;
     flex: 1;
     float: left;
-    height: 100%; /* Full height of the viewport */
+    height: 100%;
     border: 1px solid #d3d3d3;
- 
     display: flex;
     flex-direction: column;
 }
 
-.sectionheader {
+.sectionheader, .searchsectionheader {
     text-align: center;
     font-size: 1em;
     padding-bottom: 10px;
@@ -39,11 +39,14 @@ h2{
     height: 10%;
 }
 
+.searchsectionheader {
+    height: 10%;
+}
+
 .sectioncontent {
     text-align: center;
-    height: 80%;
+    height: 60vh;
     background-color: #d3d3d3;
-    float: left;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -64,25 +67,50 @@ h2{
 }
 
 .editbutton {
-    background-color: #5ddddd;
+    background-color: #dddb5d;
     width: 30%;
     height: 50%;
+}
+
+.cancelbutton {
+    background-color: #b33232;
+    width: 20%;
+    height: 50%;
+    margin: 10px;
+}
+
+.savebutton {
+    background-color: #70db4f;
+    width: 20%;
+    height: 50%;
+    margin: 10px;
 }
 
 .songtext {
     text-align: center;
     background-color: #c5c0c0;
-    border: 1px solid #d3d3d3;
+    outline: 1px solid #d3d3d3;
+    padding-top: 30px;
     margin: 0;
-    height: 10%;
+    height: 50px;
     width: 100%;
 }
 
-.timeslot:hover, .editbutton:hover {
+.playlisttext {
+    text-align: center;
+    background-color: #b2b48b;
+    outline: 1px solid #d3d3d3;
+    padding-top: 30px;
+    margin: 0;
+    height: 50px;
+    width: 100%;
+}
+
+.timeslot:hover, .editbutton:hover, .cancelbutton:hover, .savebutton:hover{
     background-color: #888888;
 }
 
-.timeslot:active, .editbutton:active {
+.timeslot:active, .editbutton:active, .cancelbutton:active, .savebutton:active{
     background-color: #ffffff;
 }
 

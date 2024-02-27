@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DJ: Playlist Editor</title>
+    <link rel="stylesheet" type="text/css" href="group.css">
+    <link rel="stylesheet" type="text/css" href="DJ.css">
+</head>
+<body>
+    <header class = "header">
+        <div class="left">
+            <button type="menu"><img src="menu.png" alt="menubutton" height="50px" width="50px"></button>
+        </div>
+        <div class="middle">
+            <h1>Radio Station</h1>
+        </div>
+        <div class="right">
+            <button type="button">Login</button>
+        </div>
+    </header>
+
+    <div>
+        <h1>DJ Playlist Editor</h1>
+    </div>
+    
+    <main class = "main">
+        <!-- First Section -->
+        <section class="section">
+            <div class="sectionheader">
+                <h2>Edit Current Playlist</h2>
+            </div>
+            <div class="sectioncontent">
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li class="songtext">
+                        Song Name
+                        <button type="button" class="arrowup">Move Up</button>
+                        <button type="button" class="arrowdown">Move Down</button>
+                        <button type="button" class="delete">X</button>
+                    </li> 
+
+                    <li class="songtext">
+                        Song Name
+                        <button type="button" class="arrowup">Move Up</button>
+                        <button type="button" class="arrowdown">Move Down</button>
+                        <button type="button" class="delete">X</button>
+                    </li> 
+
+                    <li class="songtext">
+                        Song Name
+                        <button type="button" class="arrowup">Move Up</button>
+                        <button type="button" class="arrowdown">Move Down</button>
+                        <button type="button" class="delete">X</button>
+                    </li> 
+
+                    <li class="songtext">
+                        Song Name
+                        <button type="button" class="arrowup">Move Up</button>
+                        <button type="button" class="arrowdown">Move Down</button>
+                        <button type="button" class="delete">X</button>
+                    </li> 
+                    
+                </ul> 
+            </div>
+            <div class="sectionfooter">
+                <button type="button" class="savebutton">Save</button>
+                <button type="button" class="cancelbutton">Cancel</button>
+            </div>    
+        </section>
+
+        <!-- Second Section -->
+        <section class="section">
+            <div class="searchsectionheader">
+                <h2>Search for a new track:</h2>
+                <label>Previous Playlist:</label>
+                <input type="checkbox" id="prevplaylistbox">
+                <label> Track:</label>
+                <input type="checkbox" id="trackbox"><br>
+                <input type="text" id="search" name="searchinput">
+                <button type="button" class="searchbutton">Search</button>
+            </div>
+            <div class="sectioncontent">
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li class="songtext">
+                        Song Name
+                        <button type="button" class="addbutton">Add</button>
+                    </li> 
+                    <li class="songtext">
+                        Song Name
+                        <button type="button" class="addbutton">Add</button>
+                    </li> 
+                    <li class="playlisttext">
+                        Playlist Name
+                        <button type="button" class="viewplaylistbutton">View</button>
+                    </li> 
+                    <li class="playlisttext">
+                        Playlist Name
+                        <button type="button" class="viewplaylistbutton">View</button>
+                    </li> 
+                </ul>
+            </div>
+            <div class="sectionfooter"></div>    
+        </section>
+    </main>
+    <footer class="footer">
+        <!--This is the footer. It will hold contact information.-->
+        <p>This is the contact information for the website. Phone calls and emails would go here.</p>
+    </footer>
+</body>
+</html>
