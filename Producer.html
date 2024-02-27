@@ -1,78 +1,93 @@
+<!--Still need to finish this, preferably by Monday-->
 <!DOCTYPE html>
 <html>
     <head>
         <title>Producer</title>
         <link rel="stylesheet" type="text/css" href="group.css">
+        <link rel="stylesheet" type="text/css" href="producer.css">
     </head>
-    <div class = "header">
-        <div class="left">
-            <button type="menu"><img src="menu.png" alt="menubutton" height="50px" width="50px"></button>
+    <header>
+        <div class = "header">
+            <div class="left">
+                <button type="menu"><img src="menu.png" alt="menubutton" height="50px" width="50px"></button>
+            </div>
+            <div class="middle">
+                <h1>Radio Station</h1>
+            </div>
+            <div class="right">
+                <!--This should be the button for where people can log in or sign up.-->
+                <button type="submit">Login</button>
+            </div>
         </div>
-        <div class="middle">
-            <h1>Radio Station</h1>
+    </header>
+    <!--Header is complete, just need the body.-->
+    <body>
+        <div>
+            <div>
+                <!--Drop downs for DJ and Available Time Slot go here-->
+                <select name="DJ List">
+                    <option value="DJ 1">DJ 1</option>
+                    <option value="DJ 2">DJ 2</option>
+                    <option value="DJ 3">DJ 3</option>
+                    <option value="DJ 4">DJ 4</option>
+                </select>
+                <select name="Time Slot List">
+                    <option value="Time Slot 1">Time Slot 1</option>
+                    <option value="Time Slot 2">Time Slot 2</option>
+                    <option value="Time Slot 3">Time Slot 3</option>
+                    <option value="Time Slot 4">Time Slot 4</option>
+                    <option value="Time Slot 5">Time Slot 5</option>
+                    <option value="Time Slot 6">Time Slot 6</option>
+                </select>
+                <button type="submit">See Playlist</button>
+                <button type="submit">Edit Playlist</button>
+            </div>
+            <div class="row">
+                <!--Playlist Section-->
+                <div class="column left">
+                    <h2>Playlist</h2>
+                    <ul>
+                        <li draggable="true">Song 1</li>
+                        <li draggable="true">Song 2</li>
+                        <li draggable="true">Song 3</li>
+                        <li draggable="true">Song 4</li>
+                        <li draggable="true">Song 5</li>
+                        <li draggable="true">Song 6</li>
+                        <li draggable="true">Song 7</li>
+                        <li draggable="true">Song 8</li>
+                        <li draggable="true">Song 9</li>
+                        <li draggable="true">Song 10</li>
+                    </ul>
+                    <!--This button should cause a popup to appear that will let people add an announcement-->
+                    <button type="submit">Add Announcement</button>
+                </div>
+                <!--Song Swap Buttons Section-->
+                <div class="column middle">
+                    <!--This section will have two arrow buttons to transfer songs between lists.-->
+                    <button type="button" class="largerButton">></button>
+                    
+                    <button type="button" class="largerButton"><</button>
+                </div>
+                <!--Song List Section-->
+                <div class="column right">
+                    <h2>Song List</h2>
+                    <ul>
+                        <li draggable="true">Song 11</li>
+                        <li draggable="true">Song 12</li>
+                        <li draggable="true">Song 13</li>
+                        <li draggable="true">Song 14</li>
+                        <li draggable="true">Song 15</li>
+                        <li draggable="true">Song 16</li>
+                        <li draggable="true">Song 17</li>
+                        <li draggable="true">Song 18</li>
+                        <li draggable="true">Song 19</li>
+                    </ul>
+                </div>
+            </div>
+            <footer class="footer">
+                <!--This is the footer. It will hold contact information.-->
+                <p>This is the contact information for the website. Phone calls and emails would go here.</p>
+            </footer>
         </div>
-        <div class="right">
-            <button type="submit">Login</button>
-        </div>
-        <!--This should be the button for where people can log in or sign up.-->
-    </div>
-    <div>
-        <!--Drop downs for DJ and Available Time Slot go here-->
-        <!--Probably best to have a button for people to select that will let them pick the timeslot-->
-        <select name="DJ List">
-            <option value="DJ 1">DJ 1</option>
-            <option value="DJ 2">DJ 2</option>
-            <option value="DJ 3">DJ 3</option>
-            <option value="DJ 4">DJ 4</option>
-        </select>
-        <select name="Time Slot List">
-            <option value="Time Slot 1">Time Slot 1</option>
-            <option value="Time Slot 2">Time Slot 2</option>
-            <option value="Time Slot 3">Time Slot 3</option>
-            <option value="Time Slot 4">Time Slot 4</option>
-            <option value="Time Slot 5">Time Slot 5</option>
-            <option value="Time Slot 6">Time Slot 6</option>
-        </select>
-        <button type="submit">See Playlist</button>
-    </div>
-    <div>
-        <!--Actually, just put the names playlist and song list here, then put the actual lists in a different part-->
-        <p>Playlist</p>
-        <p>Song List</p>
-    </div>
-    <div>
-        <!--The playlist and the song list would go here. Both lists need to be scrollable, as well as letting people drag elements from one to another.-->
-        <nav>
-            <ul>
-                <li>Song 1</li>
-                <li>Song 2</li>
-                <li>Song 3</li>
-                <li>Song 4</li>
-                <li>Song 5</li>
-                <li>Song 6</li>
-                <li>Song 7</li>
-                <li>Song 8</li>
-                <li>Song 9</li>
-                <li>Song 10</li>
-            </ul>
-        </nav>
-        <button type="submit">Add Announcement</button>
-        <nav>
-            <ul>
-                <li>Song 11</li>
-                <li>Song 12</li>
-                <li>Song 13</li>
-                <li>Song 14</li>
-                <li>Song 15</li>
-                <li>Song 16</li>
-                <li>Song 17</li>
-                <li>Song 18</li>
-                <li>Song 19</li>
-            </ul>
-        </nav>
-    </div>
-    <footer class="footer">
-        <!--This is the footer. It will hold contact information.-->
-        <p>This is the contact information for the website. Phone calls and emails would go here.</p>
-    </footer>
+    </body>
 </html>
