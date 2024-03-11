@@ -47,27 +47,23 @@ function responsiveMenu() {
 	});
 }
 
+function confirmTimes(e) {
+	const timeSlotsSection = document.getElementById('time-slots');
+	const message = document.getElementById('time-slots-msg');
+	
+	if (timeSlotsSection.querySelectorAll('input:checked').length < 1) {
+		message.textContent = ' Time slots need to be selected first.';
+	} else {
+		message.textContent = ' Applied successfully.';
+	}
+	
+	setTimeout(() => message.textContent = '', 3000);
+	e.preventDefault();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	responsiveMenu();
 	populatePlaytimes();
 	
-	const timeSlotsSection = document.getElementById('time-slots');
-	const reportsSection = document.getElementById('dj-reports');
-	const timeSlotConfirm = timeSlotsSection.querySelector('[type="submit"]');
-	
-	timeSlotConfirm.addEventListener('click', e => {
-		const message = document.getElementById('time-slots-msg');
-		
-		// FIXME this should be a conditional check to see if any changes have
-		// been actually made instead.
-		if (timeSlotsSection.querySelectorAll('input:checked').length < 1) {
-			message.textContent = ' Time slots need to be selected first.';
-		} else {
-			message.textContent = ' Applied successfully.';
-		}
-		
-		setTimeout(() => message.textContent = '', 3000);
-		e.preventDefault();
-	});
-	
+	// const reportsSection = document.getElementById('dj-reports');
 });
