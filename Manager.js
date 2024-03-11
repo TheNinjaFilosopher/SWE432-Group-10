@@ -43,9 +43,7 @@ function responsiveMenu() {
 	});
 	
 	hamburger.addEventListener('click', function() {
-		if (window.innerWidth <= 850) {
-			navlist.style = 'left: 0 !important;'
-		}
+		navlist.style = 'left: 0 !important;'
 	});
 }
 
