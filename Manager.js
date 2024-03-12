@@ -1,7 +1,27 @@
+/* ==========================
+ * BEGIN - FAKE MEMBERS TEST
+ * ==========================
+ */
+
 const djs = [
-	new DJMember("Turner", "Alex"),
-	new DJMember("Turner", "John")
+	new DJMember("Turner", "Alex", "Taylor Swift", "Country", 1),
+	new DJMember("Turner", "John", "Jack Harlow", "Pop", 5)
 ];
+
+const producers = [
+	new ProducerMember("Hill", "James", 15),
+	new ProducerMember("Polly", "Camellia", 10)
+];
+
+for (let i = 0; i < 2; i++) {
+	djs[i].assocProducer = producers[i];
+	producers[i].assocDJ = djs[i];
+}
+
+/* ==========================
+ *   END - FAKE MEMBERS TEST
+ * ==========================
+ */
 
 function populatePlaytimes() {
 	const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
@@ -76,8 +96,9 @@ function confirmTimes(e) {
 	e.preventDefault();
 }
 
-function revisualizeTimes() {
+function updateInfo() {
 	const djId = document.getElementById('dj').value;
+	let currDJ;
 	
 	// clear previous checked time slots
 	for (slot of timeSlotsSection.querySelectorAll('input:checked')) {
@@ -95,6 +116,7 @@ function revisualizeTimes() {
 		const timeSlots = dj.getTimeSlots();
 		
 		if (dj.id == djId) {
+			currDJ = dj;
 			for (slot of timeSlots) {
 				timeSlotsSection.querySelector(`[value="${slot}"]`).click();
 			}
@@ -104,7 +126,12 @@ function revisualizeTimes() {
 			}
 		}
 	}
-
+	
+	// update reports
+	document.getElementById('dj-reports-aow').textContent = `Artist of the Week: ${currDJ.popularArtist}`;
+	document.getElementById('dj-reports-gow').textContent = `Genre of the Week: ${currDJ.popularGenre}`;
+	document.getElementById('dj-reports-prodasssigned').textContent = `# Producer-assigned songs: ${currDJ.assocProducer.songsAssigned}`;
+	document.getElementById('dj-reports-songsplayed').textContent = `# Songs DJ Played: ${currDJ.songsPlayed}`;
 }
 
 document.addEventListener('DOMContentLoaded', function() {

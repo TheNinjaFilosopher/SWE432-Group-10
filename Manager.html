@@ -90,7 +90,7 @@
 		
 			<section id="time-slots">
 				<label for="dj">Select a DJ:</label>
-				<select onchange="revisualizeTimes()" name="dj" id="dj">
+				<select onchange="updateInfo()" name="dj" id="dj">
 					<option value="" selected disabled>DJs</option>
 				</select>
 				<a href="#">Contact DJ</a><span> |</span>
@@ -138,13 +138,13 @@
 				<div class="section-wrapper">
 					<h3 style="margin-top: 0;">General Statistics</h3>
 					<ul>
-						<li>Artist of the Week:</li>
-						<li>Genre of the Week:</li>
+						<li id="dj-reports-aow">Artist of the Week:</li>
+						<li id="dj-reports-gow">Genre of the Week:</li>
 					</ul>
 					<h3>Compared to Producer</h3>
 					<ul>
-						<li># Producer-assigned songs:</li>
-						<li># Songs DJ Played:</li>
+						<li id="dj-reports-prodasssigned"># Producer-assigned songs:</li>
+						<li id="dj-reports-songsplayed"># Songs DJ Played:</li>
 					</ul>
 				</div>
 			</section>

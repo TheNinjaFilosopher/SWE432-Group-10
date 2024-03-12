@@ -20,8 +20,11 @@ class Member {
 }
 
 class DJMember extends Member {
-	constructor(lastName, firstName) {
+	constructor(lastName, firstName, popularArtist, popularGenre, songsPlayed) {
 		super(lastName, firstName);
+		this.popularArtist = popularArtist;
+		this.popularGenre = popularGenre;
+		this.songsPlayed = songsPlayed;
 		this.timeSlots = new Set();
 		this.assocProducer = {};
 	}
@@ -41,6 +44,10 @@ class DJMember extends Member {
 	clearTimeSlots() {
 		this.timeSlots.clear();
 	}
+	
+	assignProducer(producer) {
+		this.assocProducer = producer;
+	}
 
 	/*
 	removeTimeSlot(slot) {
@@ -50,7 +57,9 @@ class DJMember extends Member {
 }
 
 class ProducerMember extends Member {
-	constructor(lastName, firstName) {
+	constructor(lastName, firstName, songsAssigned) {
 		super(lastName, firstName);
+		this.songsAssigned = songsAssigned;
+		this.assocDJ = {};
 	}
 }
