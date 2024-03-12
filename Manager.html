@@ -3,6 +3,7 @@
 	<head>
 		<title>Manager</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src="ManagerClasses.js"></script>
 		<script src="Manager.js"></script>
 		<link rel="stylesheet" type="text/css" href="Manager.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -26,6 +27,11 @@
 				
 				td {
 					height: 50px;
+					border-right: 1px solid black;
+					background-repeat: no-repeat;
+					background-position: center; 
+					background-size: 15px;
+					background-blend-mode: overlay;
 				}
 				
 				tr:first-child {
@@ -44,10 +50,6 @@
 					border-bottom: 1px dashed gray;
 				}
 				
-				td {
-					border-right: 1px solid black;
-				}
-				
 				input[type="checkbox"] {
 					margin: 0;
 					opacity: 0;
@@ -58,15 +60,12 @@
 				
 				td:has(input:checked) {
 					background-color: lightgreen;
+					background-image: url("check-solid.svg");
 				}
-
-				/* TODO: use background image instead */
-				td:has(input:checked):before {
-					content: '\2713';
-					color : black;
-					position: relative;
-					top: 50%;
-					left: 40%;
+				
+				td:has(input:disabled) {
+					background-color: #ee9090;
+					background-image: url("xmark-solid.svg");
 				}
 			}
 		</style>
@@ -91,9 +90,8 @@
 		
 			<section id="time-slots">
 				<label for="dj">Select a DJ:</label>
-				<select name="dj" id="dj">
+				<select onchange="updateInfo()" name="dj" id="dj">
 					<option value="" selected disabled>DJs</option>
-					<option value="1">Alex Turner</option>
 				</select>
 				<a href="#">Contact DJ</a><span> |</span>
 				<a href="#">Contact Associated Producer</a>
@@ -126,7 +124,7 @@
 								</tbody>
 							</table>
 						</div>
-						<input type="submit" value="Confirm"><span id="time-slots-msg"></span>
+						<input type="submit" onclick="confirmTimes(event)" value="Confirm"><span id="time-slots-msg"></span>
 					</form>
 				</div>
 			</section>
@@ -140,13 +138,13 @@
 				<div class="section-wrapper">
 					<h3 style="margin-top: 0;">General Statistics</h3>
 					<ul>
-						<li>Artist of the Week:</li>
-						<li>Genre of the Week:</li>
+						<li id="dj-reports-aow">Artist of the Week:</li>
+						<li id="dj-reports-gow">Genre of the Week:</li>
 					</ul>
 					<h3>Compared to Producer</h3>
 					<ul>
-						<li># Producer-assigned songs:</li>
-						<li># Songs DJ Played:</li>
+						<li id="dj-reports-prodasssigned"># Producer-assigned songs:</li>
+						<li id="dj-reports-songsplayed"># Songs DJ Played:</li>
 					</ul>
 				</div>
 			</section>
