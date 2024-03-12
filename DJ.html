@@ -4,6 +4,8 @@
     <title>DJ</title>
     <link rel="stylesheet" type="text/css" href="group10.css">
     <link rel="stylesheet" type="text/css" href="DJ.css">
+    <script src="DJ.js"></script>
+    <script src="DJdummyPlaylist.js"></script>
 </head>
 <body>
     <header class = "header">
@@ -30,12 +32,7 @@
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date">
             </div>
-            <div class="sectioncontent">
-                <button type="button" class="timeslot">StartTime - EndTime</button>
-                <button type="button" class="timeslot">StartTime - EndTime</button>
-                
-                
-            </div>
+            <div class="sectioncontent" id="timeslots"></div>
             <div class="sectionfooter">
                 <label>Select a slot to view/edit playlist</label>
             </div>    
@@ -47,32 +44,12 @@
                 <h2>Assigned playlist for Selected Time</h2>
             </div>
             <div class="sectioncontent">
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
-                    <li class="songtext">Song Name</li> 
+                <ul style="list-style: none; padding: 0; margin: 0;" id="songslots">
+                    
                 </ul>
             </div>
             <div class="sectionfooter">
-                <button type="button" class="editbutton">Edit Playlist</button>
+                <button type="button" class="editbutton" id="editbutton">Edit Playlist</button>
             </div>    
         </section>
     </main>
