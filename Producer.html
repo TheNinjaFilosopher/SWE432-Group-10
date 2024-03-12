@@ -1,10 +1,13 @@
 <!--Still need to finish this, preferably by Monday-->
+<!--Need to implement the javascript now-->
+<!--Different strokes for different sections, use inline event handlers for the announcement maker and the login button-->
 <!DOCTYPE html>
 <html>
     <head>
         <title>Producer</title>
         <link rel="stylesheet" type="text/css" href="group.css">
         <link rel="stylesheet" type="text/css" href="producer.css">
+        <script src="Producer.js"></script>
     </head>
     <header>
         <div class = "header">
@@ -59,7 +62,21 @@
                         <li draggable="true">Song 10</li>
                     </ul>
                     <!--This button should cause a popup to appear that will let people add an announcement-->
-                    <button type="submit">Add Announcement</button>
+                    <button type="submit" class="open-button" onclick="openForm()">Add Announcement</button>
+                    <div class="form-popup" id="myForm">
+                        <form class="form-container">
+                          <h1>New Announcement</h1>
+                      
+                          <label for="name"><b>Name of Announcement</b></label>
+                          <input type="text" placeholder="Enter Name" name="name" id="name" required>
+                      
+                          <label for="length"><b>Length of Announcement (in minutes)</b></label>
+                          <input type="number" placeholder="Enter Length" name="length" id="length" required>
+                      
+                          <button type="submit" class="btn" onclick="submitForm()">Submit Announcement</button>
+                          <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                        </form>
+                      </div>
                 </div>
                 <!--Song Swap Buttons Section-->
                 <div class="column middle">
