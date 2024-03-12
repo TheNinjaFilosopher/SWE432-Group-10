@@ -39,7 +39,7 @@
             <div class="sectionfooter">
 
                 <!-- Inline Event Handler Approach -->
-                <button type="button" class="savebutton" id="savebutton" onclick="console.log('save button was clicked')">Save</button>
+                <button type="button" class="savebutton" id="savebutton" onclick="alert('Playlist saving not implemented yet.')">Save</button>
 
                 <button type="button" class="cancelbutton" id="cancelbutton">Cancel</button>
             </div>    
@@ -47,15 +47,15 @@
 
         <!-- Second Section -->
         <section class="section">
-            <div class="searchsectionheader">
+            <form class="searchsectionheader">
                 <h2>Search for a new track:</h2>
                 <label>Previous Playlist:</label>
                 <input type="checkbox" id="prevplaylistbox">
                 <label> Track:</label>
                 <input type="checkbox" id="trackbox"><br>
                 <input type="text" id="search" name="searchinput">
-                <button type="button" class="searchbutton">Search</button>
-            </div>
+                <button type="button" class="searchbutton" id="searchbutton">Search</button>
+            </form>
             <div class="sectioncontent">
                 <ul style="list-style: none; padding: 0; margin: 0;">
                     <li class="songtext">

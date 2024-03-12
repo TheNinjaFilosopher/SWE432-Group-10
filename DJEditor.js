@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let songslots = document.getElementById('songslots');
     const cancelbutton = document.getElementById('cancelbutton');
     const savebutton = document.getElementById('savebutton');
+    const searchbutton = document.getElementById('searchbutton');
 
     let songlistcopy = [];
     for (let i = 0; i < currentplaylist.songs.length; i++) {
@@ -109,8 +110,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //save data to database
         //not implemented yet
-        alert("Playlist saving not implemented yet.");
+
         window.location.href = "DJ.html";
+    });
+
+    searchbutton.addEventListener('click', function () {
+        let prevplaylistToggle = document.getElementById('prevplaylistbox');
+        let trackToggle = document.getElementById('trackbox');
+        let search = document.getElementById('search');
+
+        if (!prevplaylistToggle.checked && !trackToggle.checked) {
+            alert("Please select a search option.");
+        } else if (search.value === "") {
+            alert("Please enter a search term.");
+        } else {
+            alert("Search not implemented yet.");
+        }
+
     });
 
     displayPlaylist();
