@@ -1,3 +1,28 @@
+/* ==========================
+ * BEGIN - FAKE MEMBERS TEST
+ * ==========================
+ */
+
+const djs = [
+	new DJMember("Turner", "Alex", "Taylor Swift", "Country", 1),
+	new DJMember("Turner", "John", "Jack Harlow", "Pop", 5)
+];
+
+const producers = [
+	new ProducerMember("Hill", "James", 15),
+	new ProducerMember("Polly", "Camellia", 10)
+];
+
+for (let i = 0; i < 2; i++) {
+	djs[i].assocProducer = producers[i];
+	producers[i].assocDJ = djs[i];
+}
+
+/* ==========================
+ *   END - FAKE MEMBERS TEST
+ * ==========================
+ */
+
 function populatePlaytimes() {
 	const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 	const firstHalfInterval = document.getElementById("time-slots").querySelector("tbody").lastElementChild;
@@ -47,13 +72,23 @@ function responsiveMenu() {
 	});
 }
 
+let timeSlotsSection;
+
 function confirmTimes(e) {
-	const timeSlotsSection = document.getElementById('time-slots');
 	const message = document.getElementById('time-slots-msg');
+	const djId = document.getElementById('dj').value;
 	
-	if (timeSlotsSection.querySelectorAll('input:checked').length < 1) {
-		message.textContent = ' Time slots need to be selected first.';
+	if (!djId) {
+		message.textContent = ' A DJ needs to be selected first.';
 	} else {
+		const currentDJ = djs.find(dj => dj.id == djId);
+		
+		// save time slots
+		currentDJ.clearTimeSlots();
+		for (slot of timeSlotsSection.querySelectorAll('input:checked')) {
+			currentDJ.addTimeSlot(slot.value);
+		}
+		
 		message.textContent = ' Applied successfully.';
 	}
 	
@@ -61,9 +96,58 @@ function confirmTimes(e) {
 	e.preventDefault();
 }
 
+function updateInfo() {
+	const djId = document.getElementById('dj').value;
+	let currDJ;
+	
+	// clear previous checked time slots
+	for (slot of timeSlotsSection.querySelectorAll('input:checked')) {
+		slot.click();
+	}
+	
+	// clear previous conflicting time slots
+	for (slot of timeSlotsSection.querySelectorAll('input:disabled')) {
+		slot.removeAttribute('disabled');
+	}
+	
+	// then display current time sltos of the selected DJ
+	// + disallow conflicting time slots
+	for (dj of djs) {
+		const timeSlots = dj.getTimeSlots();
+		
+		if (dj.id == djId) {
+			currDJ = dj;
+			for (slot of timeSlots) {
+				timeSlotsSection.querySelector(`[value="${slot}"]`).click();
+			}
+		} else {
+			for (slot of timeSlots) {
+				timeSlotsSection.querySelector(`[value="${slot}"]`).disabled = true;
+			}
+		}
+	}
+	
+	// update reports
+	document.getElementById('dj-reports-aow').textContent = `Artist of the Week: ${currDJ.popularArtist}`;
+	document.getElementById('dj-reports-gow').textContent = `Genre of the Week: ${currDJ.popularGenre}`;
+	document.getElementById('dj-reports-prodasssigned').textContent = `# Producer-assigned songs: ${currDJ.assocProducer.songsAssigned}`;
+	document.getElementById('dj-reports-songsplayed').textContent = `# Songs DJ Played: ${currDJ.songsPlayed}`;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	responsiveMenu();
 	populatePlaytimes();
+	timeSlotsSection = document.getElementById('time-slots');
+	Object.seal(timeSlotsSection);
 	
 	// const reportsSection = document.getElementById('dj-reports');
+	
+	// populate DJ dropdown
+	const djDropdown = document.getElementById('dj');
+	for (dj of djs) {
+		const listing = document.createElement('option');
+		listing.value = dj.id;
+		listing.textContent = `${dj.firstName} ${dj.lastName}`;
+		djDropdown.insertAdjacentElement('beforeend', listing);
+	}
 });
