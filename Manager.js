@@ -1,3 +1,8 @@
+const djs = [
+	new DJMember("Turner", "Alex"),
+	new DJMember("Turner", "John")
+];
+
 function populatePlaytimes() {
 	const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 	const firstHalfInterval = document.getElementById("time-slots").querySelector("tbody").lastElementChild;
@@ -47,13 +52,23 @@ function responsiveMenu() {
 	});
 }
 
+let timeSlotsSection;
+
 function confirmTimes(e) {
-	const timeSlotsSection = document.getElementById('time-slots');
 	const message = document.getElementById('time-slots-msg');
+	const djId = document.getElementById('dj').value;
 	
-	if (timeSlotsSection.querySelectorAll('input:checked').length < 1) {
-		message.textContent = ' Time slots need to be selected first.';
+	if (!djId) {
+		message.textContent = ' A DJ needs to be selected first.';
 	} else {
+		const currentDJ = djs.find(dj => dj.id == djId);
+		
+		// save time slots
+		currentDJ.clearTimeSlots();
+		for (slot of timeSlotsSection.querySelectorAll('input:checked')) {
+			currentDJ.addTimeSlot(slot.value);
+		}
+		
 		message.textContent = ' Applied successfully.';
 	}
 	
@@ -61,9 +76,51 @@ function confirmTimes(e) {
 	e.preventDefault();
 }
 
+function revisualizeTimes() {
+	const djId = document.getElementById('dj').value;
+	
+	// clear previous checked time slots
+	for (slot of timeSlotsSection.querySelectorAll('input:checked')) {
+		slot.click();
+	}
+	
+	// clear previous conflicting time slots
+	for (slot of timeSlotsSection.querySelectorAll('input:disabled')) {
+		slot.removeAttribute('disabled');
+	}
+	
+	// then display current time sltos of the selected DJ
+	// + disallow conflicting time slots
+	for (dj of djs) {
+		const timeSlots = dj.getTimeSlots();
+		
+		if (dj.id == djId) {
+			for (slot of timeSlots) {
+				timeSlotsSection.querySelector(`[value="${slot}"]`).click();
+			}
+		} else {
+			for (slot of timeSlots) {
+				timeSlotsSection.querySelector(`[value="${slot}"]`).disabled = true;
+			}
+		}
+	}
+
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	responsiveMenu();
 	populatePlaytimes();
+	timeSlotsSection = document.getElementById('time-slots');
+	Object.seal(timeSlotsSection);
 	
 	// const reportsSection = document.getElementById('dj-reports');
+	
+	// populate DJ dropdown
+	const djDropdown = document.getElementById('dj');
+	for (dj of djs) {
+		const listing = document.createElement('option');
+		listing.value = dj.id;
+		listing.textContent = `${dj.firstName} ${dj.lastName}`;
+		djDropdown.insertAdjacentElement('beforeend', listing);
+	}
 });

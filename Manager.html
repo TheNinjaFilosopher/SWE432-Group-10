@@ -27,6 +27,11 @@
 				
 				td {
 					height: 50px;
+					border-right: 1px solid black;
+					background-repeat: no-repeat;
+					background-position: center; 
+					background-size: 15px;
+					background-blend-mode: overlay;
 				}
 				
 				tr:first-child {
@@ -45,10 +50,6 @@
 					border-bottom: 1px dashed gray;
 				}
 				
-				td {
-					border-right: 1px solid black;
-				}
-				
 				input[type="checkbox"] {
 					margin: 0;
 					opacity: 0;
@@ -59,15 +60,12 @@
 				
 				td:has(input:checked) {
 					background-color: lightgreen;
+					background-image: url("check-solid.svg");
 				}
-
-				/* TODO: use background image instead */
-				td:has(input:checked):before {
-					content: '\2713';
-					color : black;
-					position: relative;
-					top: 50%;
-					left: 40%;
+				
+				td:has(input:disabled) {
+					background-color: #ee9090;
+					background-image: url("xmark-solid.svg");
 				}
 			}
 		</style>
@@ -92,9 +90,8 @@
 		
 			<section id="time-slots">
 				<label for="dj">Select a DJ:</label>
-				<select name="dj" id="dj">
+				<select onchange="revisualizeTimes()" name="dj" id="dj">
 					<option value="" selected disabled>DJs</option>
-					<option value="1">Alex Turner</option>
 				</select>
 				<a href="#">Contact DJ</a><span> |</span>
 				<a href="#">Contact Associated Producer</a>

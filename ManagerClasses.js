@@ -2,14 +2,14 @@ class Member {
 	static #count = 0;
 
 	constructor(lastName, firstName) {
-		this.id = ++this.#count;
+		this.id = ++Member.#count;
 		this.lastName = lastName;
 		this.firstName = firstName;
 	}
 
 	static validateTimeSlot(slot) {
 		/* Ensure the given string is in the format day-HHMM-HHMM (24-hour format) */
-		if (/^(s(un|at)|t(ue|thu)|mon|wed|fri)-([01]\d|2[0-3])(00|30)-([01]\d|2[0-3])(00|30)$/.test(slot)) {
+		if (/^(s(un|at)|t(ue|hu)|mon|wed|fri)-([01]\d|2[0-3])(00|30)-([01]\d|2[0-3])(00|30)$/.test(slot)) {
 			const tokens = slot.split('-');
 			const begin = parseInt(tokens[1]);
 			const end = parseInt(tokens[2]);
@@ -37,10 +37,16 @@ class DJMember extends Member {
 		}
 		return false;
 	}
+	
+	clearTimeSlots() {
+		this.timeSlots.clear();
+	}
 
+	/*
 	removeTimeSlot(slot) {
 		return this.timeSlots.delete(slot);
 	}
+	*/
 }
 
 class ProducerMember extends Member {
