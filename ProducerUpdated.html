@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Radio Station - Producer</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src="js/global.js"></script>
+		<script src="js/ProducerUpdated.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/global.css">
+		<link rel="stylesheet" type="text/css" href="css/manager.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+		<style>
+		section ul {
+			list-style-type: none;
+			text-align: center;
+		}
+		</style>
+	</head>
+	
+	<body>
+		<header>
+			<h1 style="text-align:center;">
+				<img style="width: 35px; filter: invert(1);" src="images/ui/radio-solid.svg">
+				<span>Radio Station</span>
+			</h1>
+		</header>
+		<nav>
+			<button><img src="images/ui/menu.svg" alt="menubutton" height="50px" width="50px"></button>
+			<ul>
+				<li><span class="fa-solid fa-user"></span> User</li>
+				<li><span class="fa-solid fa-inbox"></span> Inbox</li>
+				<li><span class="fa-solid fa-door-open"></span> Log out</li>
+			</ul>
+		</nav>
+		<main>
+		
+			<section id="play-list" style="width: 40%;">
+				<span>Good afternoon, James Hill.</span>
+				
+				
+				<div class="section-header">
+					<h1>Playlist</h1>
+					<div class="section-header-forms">
+						<label for="dj">Select DJ:</label>
+						<select name="dj" id="dj">
+							<option value="" selected disabled>DJs</option>
+						</select>
+						<span>&nbsp;</span>
+						<label for="dj">Select Timeslot:</label>
+						<select onchange="updateInfo()" name="timeslot" id="timeslot">
+							<option value="" selected disabled>Timeslots</option>
+						</select>
+					</div>
+				</div>
+				<div class="section-wrapper">
+					<ul>
+                        <li draggable="true">Song 1</li>
+                        <li draggable="true">Song 2</li>
+                        <li draggable="true">Song 3</li>
+                        <li draggable="true">Song 4</li>
+                        <li draggable="true">Song 5</li>
+                        <li draggable="true">Song 6</li>
+                        <li draggable="true">Song 7</li>
+                        <li draggable="true">Song 8</li>
+                        <li draggable="true">Song 9</li>
+                        <li draggable="true">Song 10</li>
+                    </ul>
+					<button id="open-add-announcement">Add Announcement</button>
+				</div>
+			</section>
+			
+			<section style="width: 5%; display: flex; align-items: center; justify-content: center;">
+				<button type="button" class="largerButton">&gt;</button>
+				<button type="button" class="largerButton">&lt;</button>
+			</section>
+			
+			<section id="song-list" style="width: 40%;">
+				<span>&nbsp;</span>
+				<h1 class="section-header">Song List</h1>
+				<div class="section-wrapper">
+					<ul>
+                        <li draggable="true">Song 11</li>
+                        <li draggable="true">Song 12</li>
+                        <li draggable="true">Song 13</li>
+                        <li draggable="true">Song 14</li>
+                        <li draggable="true">Song 15</li>
+                        <li draggable="true">Song 16</li>
+                        <li draggable="true">Song 17</li>
+                        <li draggable="true">Song 18</li>
+                        <li draggable="true">Song 19</li>
+                    </ul>
+				</div>
+			</section>
+			
+		</main>
+		<footer><span style="display: inline-block; transform: scaleX(-1);">&copy;</span><span> 2024 Radio Station. All rights relaxed.</span></footer>
+		
+		<div id="action-feedback">
+			<div id="action-feedback-msg">
+				<h2 id="action-feedback-msg-header" style="margin: none; text-transform: capitalize;">type</h1>
+				<p id="action-feedback-msg-text">message</p>
+			</div>
+			<div id="action-feedback-close" onclick='closeFeedback()'>
+				<span>&#x2715;</span>
+			</div>
+		</div>
+		
+		<div class="window" id='announcement-creator' style="display: none;">
+			<div class="window-form">
+				<div class="window-form-titlebar">     
+					<span>New Announcement</span>
+					<span>&#x2715;</span>
+				</div>
+				<!-- if your window needs an api endpoint, include this tag in between window-form-content -->
+				<!-- used as fallback -->
+				<form id='announcement-form'> 
+				<div class="window-form-content">
+					<label for="name">Name of Announcement: </label>
+					<input type="text" placeholder="Enter Name" name="announcement-name" id="announcement-name" required>
+
+					<label for="length">Length of Announcement (minutes): </label>
+					<input type="number" placeholder="Enter Length" name="announcement-length" id="announcement-length" required>
+				</div>
+				<div class="window-form-buttons" id='announcement-buttons'>
+					<button id='announcement-submit'>Submit</button>
+					<button class='cancel'>Close</button>
+				</div>
+				</form>
+			</div>
+		</div>
+		
+	</body>
+</html>

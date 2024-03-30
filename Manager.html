@@ -1,85 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Manager</title>
+		<title>Radio Station - Manager</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<script src="ManagerClasses.js"></script>
-		<script src="Manager.js"></script>
-		<link rel="stylesheet" type="text/css" href="Manager.css">
+		<script src="js/global.js"></script>
+		<script src="js/ManagerClasses.js"></script>
+		<script src="js/Manager.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/global.css">
+		<link rel="stylesheet" type="text/css" href="css/manager.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-		<style>
-			/*
-			 * The below stylesheet is exclusive to the Manager page.
-			 * This deals with the time slots.
-			 */
-			#time-slots .table-container {
-				max-height: 300px;
-				overflow: auto;
-				border: 1px solid;
-				border-color: var(--primary-color);
-			}
-
-			#time-slots table {
-				border-collapse: collapse;
-				width: 100%;
-				background-color: #fff;
-				color: black;
-				
-				td {
-					height: 50px;
-					border-right: 1px solid black;
-					background-repeat: no-repeat;
-					background-position: center; 
-					background-size: 15px;
-					background-blend-mode: overlay;
-				}
-				
-				tr:first-child {
-					position: sticky;
-					top: 0;
-					color: #fff;
-					
-					> th {
-						background-color: var(--primary-color);
-					}
-				}
-				
-				tr:nth-child(even) {
-					border: 1px solid black;
-					border-left: 0;
-					border-bottom: 1px dashed gray;
-				}
-				
-				input[type="checkbox"] {
-					margin: 0;
-					opacity: 0;
-					width: 100%;
-					height: 100%;
-					cursor: pointer;
-				}
-				
-				td:has(input:checked) {
-					background-color: lightgreen;
-					background-image: url("check-solid.svg");
-				}
-				
-				td:has(input:disabled) {
-					background-color: #ee9090;
-					background-image: url("xmark-solid.svg");
-				}
-			}
-		</style>
 	</head>
 	
 	<body>
 		<header>
 			<h1 style="text-align:center;">
-				<img style="width: 35px; filter: invert(1);" src="radio-solid.svg">
+				<img style="width: 35px; filter: invert(1);" src="images/ui/radio-solid.svg">
 				<span>Radio Station</span>
 			</h1>
 		</header>
 		<nav>
-			<button><img src="menu.png" alt="menubutton" height="50px" width="50px"></button>
+			<button><img src="images/ui/menu.svg" alt="menubutton" height="50px" width="50px"></button>
 			<ul>
 				<li><span class="fa-solid fa-user"></span> User</li>
 				<li><span class="fa-solid fa-inbox"></span> Inbox</li>
@@ -89,13 +29,16 @@
 		<main>
 		
 			<section id="time-slots">
-				<label for="dj">Select a DJ:</label>
-				<select onchange="updateInfo()" name="dj" id="dj">
-					<option value="" selected disabled>DJs</option>
-				</select>
-				<a href="#">Contact DJ</a><span> |</span>
-				<a href="#">Contact Associated Producer</a>
-				<h1 class="section-header">Allowed Playtimes</h1>
+				<span>Good Evening, Dave Jones</span>
+				<div class="section-header">
+					<h1>Allowed Playtimes</h1>
+					<div class="section-header-forms">
+						<label for="dj">Select DJ:</label>
+						<select onchange="updateInfo()" name="dj" id="dj">
+							<option value="" selected disabled>DJs</option>
+						</select>
+					</div>
+				</div>
 				<div class="section-wrapper">
 					<form>
 						<div class="table-container">
@@ -130,11 +73,16 @@
 			</section>
 			
 			<section id="dj-reports">
-				<label for="report">Select a Report:</label>
-				<select name="report" id="report">
-					<option value="1">DJ Reports</option>
-				</select>
-				<h1 class="section-header">DJ Reports</h1>
+				<span>&nbsp;</span>
+				<div class="section-header">
+					<h1>DJ Reports</h1>
+					<div class="section-header-forms">
+						<label for="report">Select Report:</label>
+						<select name="report" id="report">
+							<option value="1">DJ Reports</option>
+						</select>
+					</div>
+				</div>
 				<div class="section-wrapper">
 					<h3 style="margin-top: 0;">General Statistics</h3>
 					<ul>
@@ -151,5 +99,34 @@
 			
 		</main>
 		<footer><span style="display: inline-block; transform: scaleX(-1);">&copy;</span><span> 2024 Radio Station. All rights relaxed.</span></footer>
+		
+		<div id="action-feedback">
+			<div id="action-feedback-msg">
+				<h2 id="action-feedback-msg-header" style="margin: none; text-transform: capitalize;">type</h1>
+				<p id="action-feedback-msg-text">message</p>
+			</div>
+			<div id="action-feedback-close" onclick='closeFeedback()'>
+				<span>&#x2715;</span>
+			</div>
+		</div>
+		
+		<div class="window" style="display: none;">
+			<div class="window-form">
+				<div class="window-form-titlebar">     
+					<span>Title</span>
+					<span>&#x2715;</span>
+				</div>
+				<!-- <form> -->
+				<div class="window-form-content">
+					<p>Content here</p>
+				</div>
+				<div class="window-form-buttons">
+					<button>Submit</button>
+					<button class="cancel">Cancel</button>
+				</div>
+				<!-- </form> -->
+			</div>
+		</div>
+		
 	</body>
 </html>

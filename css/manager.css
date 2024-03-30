@@ -1,0 +1,56 @@
+#time-slots .table-container {
+	max-height: 300px;
+	overflow: auto;
+	border: 1px solid;
+	border-color: var(--primary-color);
+}
+
+#time-slots table {
+	border-collapse: collapse;
+	width: 100%;
+	background-color: #fff;
+	color: black;
+	
+	td {
+		height: 50px;
+		border-right: 1px solid black;
+		background-repeat: no-repeat;
+		background-position: center; 
+		background-size: 15px;
+		background-blend-mode: overlay;
+	}
+	
+	tr:first-child {
+		position: sticky;
+		top: 0;
+		color: #fff;
+		
+		> th {
+			background-color: var(--primary-color);
+		}
+	}
+	
+	tr:nth-child(even) {
+		border: 1px solid black;
+		border-left: 0;
+		border-bottom: 1px dashed gray;
+	}
+	
+	input[type="checkbox"] {
+		margin: 0;
+		opacity: 0;
+		width: 100%;
+		height: 100%;
+		cursor: pointer;
+	}
+	
+	td:has(input:checked) {
+		background-color: lightgreen;
+		background-image: url("../images/table/check-solid.svg");
+	}
+	
+	td:has(input:disabled) {
+		background-color: #ee9090;
+		background-image: url("../images/table/xmark-solid.svg");
+	}
+}
