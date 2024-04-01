@@ -1,0 +1,25 @@
+.timeslot,
+.songslot,
+.slot {
+    border: 1px solid #d3d3d3;
+    background-color: #f3f2f2;
+    height: 50px;
+    width: 100%;
+    text-align: center;
+    color: black;
+}
+
+.timeslot:hover,
+.songslot:hover,
+.editbutton:hover,
+.cancelbutton:hover,
+.savebutton:hover {
+    background-color: #888888;
+}
+
+.timeslot:active,
+.editbutton:active,
+.cancelbutton:active,
+.savebutton:active {
+    background-color: #ffffff;
+}
