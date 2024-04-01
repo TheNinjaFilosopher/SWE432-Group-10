@@ -1,0 +1,15 @@
+{
+  "name": "swe432-group-10",
+  "version": "1.0.0",
+  "description": "A repository for group 10 for GMU's Spring 2024 SWE432 class.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1"
+  }
+}

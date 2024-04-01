@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Radio Station - DJ Playlist Editor</title>
+    <%- include('../partials/head'); %>
+        <script src="js/DJEditorUpdated.js"></script>
+        <script src="js/DJdummyPlaylistUpdated.js"></script>
+        <style>
+            .slot {
+                border: 1px solid #d3d3d3;
+                background-color: #f3f2f2;
+                height: 50px;
+                width: 100%;
+                text-align: center;
+                color: black;
+            }
+
+            .timeslot:hover,
+            .songslot:hover,
+            .editbutton:hover,
+            .cancelbutton:hover,
+            .savebutton:hover {
+                background-color: #888888;
+            }
+
+            .timeslot:active,
+            .editbutton:active,
+            .cancelbutton:active,
+            .savebutton:active {
+                background-color: #ffffff;
+            }
+        </style>
+
+</head>
+
+<body>
+    <header class="header">
+        <%- include('../partials/header'); %>
+    </header>
+
+    <nav>
+        <%- include('../partials/nav'); %>
+    </nav>
+
+    <main>
+        <!-- First Section -->
+
+        <section id="song-slots">
+            <div class="section-header">
+                <h1>Edit Current Playlist</h1>
+                <div class="section-header-forms">
+                    <button type="button" class="savebutton" id="savebutton"
+                        onclick="alert('Playlist saving not implemented yet.')">Save</button>
+                    <button type="button" class="cancelbutton" id="cancelbutton">Cancel</button>
+                </div>
+            </div>
+            <div class="section-wrapper">
+                <ul style="list-style: none; padding: 0; margin: 0;" class="slots">
+                </ul>
+            </div>
+        </section>
+
+        <!-- Second Section -->
+
+        <section id="search-slots">
+            <div class="section-header">
+                <h1>Search for a new Track:</h1>
+                <div class="section-header-forms">
+                    <form class="searchsectionheader">
+                        <label>Previous Playlist:</label>
+                        <input type="checkbox" id="prevplaylistbox">
+                        <label> Track:</label>
+                        <input type="checkbox" id="trackbox"><br>
+                        <input type="text" id="search" name="searchinput">
+                        <button type="button" class="searchbutton" id="searchbutton">Search</button>
+                    </form>
+                </div>
+            </div>
+            <div class="section-wrapper">
+                <ul style="list-style: none; padding: 0; margin: 0;" class="slots">
+                    <li class="slot">
+                        Song Name
+                        <button type="button" class="addbutton">Add</button>
+                    </li>
+                    <li class="slot">
+                        Song Name
+                        <button type="button" class="addbutton">Add</button>
+                    </li>
+                    <li class="slot">
+                        Playlist Name
+                        <button type="button" class="viewplaylistbutton">View</button>
+                    </li>
+                    <li class="slot">
+                        Playlist Name
+                        <button type="button" class="viewplaylistbutton">View</button>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <%- include('../partials/footer'); %>
+    </footer>
+</body>
+
+</html>
