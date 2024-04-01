@@ -1,5 +1,5 @@
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -10,33 +10,33 @@ app.use(express.static(__dirname + '/public'));
 // use res.render to load up an ejs view file
 
 // index page
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
+	
 });
 
 // DJ page
-app.get('/DJ', function(req, res) {
-  res.render('pages/DJ');
+app.get('/DJ', (req, res) => {
+	res.render('pages/DJ');
 });
 
 // DJEditor page
-app.get('/DJEditor', function(req, res) {
-  res.render('pages/DJEditor');
+app.get('/DJEditor', (req, res) => {
+	res.render('pages/DJEditor');
 });
 
 /*
 // Manager page
-app.get('/Manager', function(req, res) {
-  res.render('pages/Manager');
+app.get('/Manager', (req, res) => {
+	res.render('pages/Manager');
 });
 */
 
 /*
 // Producer page
-app.get('/Producer', function(req, res) {
-  res.render('pages/Producer');
+app.get('/Producer', (req, res) => {
+	res.render('pages/Producer');
 });
 */
-
 
 app.listen(8080);
 console.log('Server is listening on port 8080');
