@@ -48,21 +48,23 @@
 						<label for="dj">Select Timeslot:</label>
 						<select onchange="updateInfo()" name="timeslot" id="timeslot">
 							<option value="" selected disabled>Timeslots</option>
+							<option value="Timeslot 1">Timeslot 1</option>
+							<option value="Timeslot 2">Timeslot 2</option>
 						</select>
 					</div>
 				</div>
 				<div class="section-wrapper">
-					<ul>
-                        <li draggable="true">Song 1</li>
-                        <li draggable="true">Song 2</li>
-                        <li draggable="true">Song 3</li>
-                        <li draggable="true">Song 4</li>
-                        <li draggable="true">Song 5</li>
-                        <li draggable="true">Song 6</li>
-                        <li draggable="true">Song 7</li>
-                        <li draggable="true">Song 8</li>
-                        <li draggable="true">Song 9</li>
-                        <li draggable="true">Song 10</li>
+					<ul id="playlist">
+                        <!--<li draggable="true" class="playlist">Song 1</li>
+                        <li draggable="true" class="playlist">Song 2</li>
+                        <li draggable="true" class="playlist">Song 3</li>
+                        <li draggable="true" class="playlist">Song 4</li>
+                        <li draggable="true" class="playlist">Song 5</li>
+                        <li draggable="true" class="playlist">Song 6</li>
+                        <li draggable="true" class="playlist">Song 7</li>
+                        <li draggable="true" class="playlist">Song 8</li>
+                        <li draggable="true" class="playlist">Song 9</li>
+                        <li draggable="true" class="playlist">Song 10</li>-->
                     </ul>
 					<button id="open-add-announcement">Add Announcement</button>
 				</div>
@@ -71,13 +73,14 @@
 			<section style="width: 5%; display: flex; align-items: center; justify-content: center;">
 				<button type="button" class="largerButton">&gt;</button>
 				<button type="button" class="largerButton">&lt;</button>
+				<button type="button" onclick="savePlaylist()" id="submission">Submit Playlist</button>
 			</section>
 			
 			<section id="song-list" style="width: 40%;">
 				<span>&nbsp;</span>
 				<h1 class="section-header">Song List</h1>
 				<div class="section-wrapper">
-					<ul>
+					<ul id="songlist">
                         <li draggable="true">Song 11</li>
                         <li draggable="true">Song 12</li>
                         <li draggable="true">Song 13</li>

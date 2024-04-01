@@ -1,8 +1,16 @@
+//First thing to do is to implement the different JS that I missed out on, as well as alter the HTML to be more similar to DJ
+//Instead of dragging elements from one list to another, simply have a button that can transfer them attached to each list item
+//An add button for the song list, and a remove button for the playlist
+//Also need a list to keep track of different playlists
+
 
 // List of announcements
 // [0] is the name of the announcement, [1] is the length of time
+
 var announcements = [];
 var announcementsCounter = 0;
+
+var playlists = [];
 
 function openForm() {
     //Upon opening the form, make sure the labels are clear and showcase the form
