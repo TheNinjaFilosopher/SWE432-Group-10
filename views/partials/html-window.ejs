@@ -4,7 +4,10 @@
 			<span><%= typeof winTitle != 'undefined' ? winTitle : 'Title' %></span>
 			<span>&#x2715;</span>
 		</div>
-		<%- typeof formAttributes != 'undefined' ? `<form id="${formAttributes.id}" method="${formAttributes.method}" action="${formAttributes.action}">` : '' %>
+		<%# below gets emitted if formAttributes is given %>
+		<% if (typeof formAttributes != 'undefined') { %>
+			<form id="<%= formAttributes.id %>" method="<%= formAttributes.method %>" action="<%= formAttributes.action %>">
+		<% } %>
 		<div class="window-form-content">
 			<%- typeof innerHTML != 'undefined' ? innerHTML : 'content here' %>
 		</div>
