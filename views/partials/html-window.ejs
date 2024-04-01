@@ -1,0 +1,17 @@
+<div class="window" <%= typeof winId != 'undefined' ? `id="${winId}"` : '' %> style="display: none;">
+	<div class="window-form">
+		<div class="window-form-titlebar">     
+			<span><%= typeof winTitle != 'undefined' ? winTitle : 'Title' %></span>
+			<span>&#x2715;</span>
+		</div>
+		<%= typeof formId != 'undefined' ? `<form id="${formId}" method="${formMethod}" action="${formAction}">` : '' %>
+		<div class="window-form-content">
+			<%= typeof innerHTML != 'undefined' ? innerHTML : 'content here' %>
+		</div>
+		<div class="window-form-buttons" <%= typeof buttonsId != 'undefined' ? `id="${buttonsId}"` : '' %>>
+			<button>Submit</button>
+			<button class="cancel">Cancel</button>
+		</div>
+		<%= typeof formId != 'undefined' ? '</form>' : '' %>
+	</div>
+</div>

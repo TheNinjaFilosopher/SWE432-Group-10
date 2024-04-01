@@ -24,12 +24,10 @@ app.get('/DJEditor', (req, res) => {
 	res.render('pages/DJEditor');
 });
 
-/*
 // Manager page
 app.get('/Manager', (req, res) => {
-	res.render('pages/Manager');
+	res.render('pages/Manager', {sessionName: 'Dave Jones'});
 });
-*/
 
 /*
 // Producer page
