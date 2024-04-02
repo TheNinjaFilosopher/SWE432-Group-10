@@ -102,6 +102,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     cancelbutton.addEventListener('click', function () {
+        window.localStorage.setItem('messageType', 'warning');
+        window.localStorage.setItem('message', 'Playlist changes discarded.');
         window.location.href = "DJ";
     });
 
@@ -109,7 +111,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //save data to database
         //not implemented yet
-
+        
+        window.localStorage.setItem('messageType', 'success');
+        window.localStorage.setItem('message', 'Playlist saving not implemented yet.');
         window.location.href = "DJ";
     });
 
@@ -119,11 +123,12 @@ document.addEventListener('DOMContentLoaded', function () {
         let search = document.getElementById('search');
 
         if (!prevplaylistToggle.checked && !trackToggle.checked) {
-            alert("Please select a search option.");
+            showFeedback('error', 'Please select a search type.');
         } else if (search.value === "") {
-            alert("Please enter a search term.");
+            showFeedback('error', 'Please enter a search term.');
         } else {
-            alert("Search not implemented yet.");
+            showFeedback('warning', 'Search not implemented yet.'); 
+            //Change to success when implemented
         }
 
     });

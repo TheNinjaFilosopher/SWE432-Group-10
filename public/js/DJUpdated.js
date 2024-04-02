@@ -6,6 +6,13 @@ document.addEventListener('DOMContentLoaded', function () {
 	const editButton = document.getElementById('editbutton');
 	let currentplaylistIndex = -1;
 
+	//Display messages from Editor if found
+	if(window.localStorage.getItem('message') !== null) {
+		showFeedback(window.localStorage.getItem('messageType'), window.localStorage.getItem('message'));
+		window.localStorage.removeItem('message');
+		window.localStorage.removeItem('messageType');
+	}
+
 	dateBox.addEventListener('change', () => {
 		const date = dateBox.value;
 
@@ -58,13 +65,13 @@ document.addEventListener('DOMContentLoaded', function () {
 	editButton.addEventListener('click', function () {
 
 		if (dateBox.value === "") {
-			alert("Please select a date.");
+			showFeedback('error', 'Please select a date.');
 			return;
 		} else if (timeslots.firstChild === null) {
-			alert("No playlists for this date.");
+			showFeedback('error', 'No playlists for this date.');
 			return;
 		} else if (songslots.firstChild === null) {
-			alert("No timeslot selected.");
+			showFeedback('error', 'No timeslots selected.');
 			return;
 		}
 
