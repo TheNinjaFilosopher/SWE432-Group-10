@@ -126,11 +126,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	// const reportsSection = document.getElementById('dj-reports');
 	
 	// populate DJ dropdown
-	const djDropdown = document.getElementById('dj');
+	/*const djDropdown = document.getElementById('dj');
 	for (dj of djs) {
 		const listing = document.createElement('option');
 		listing.value = dj.id;
 		listing.textContent = `${dj.firstName} ${dj.lastName}`;
 		djDropdown.insertAdjacentElement('beforeend', listing);
-	}
+	}*/
 });

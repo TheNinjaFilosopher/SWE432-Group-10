@@ -26,7 +26,15 @@ app.get('/DJEditor', (req, res) => {
 
 // Manager page
 app.get('/Manager', (req, res) => {
-	res.render('pages/Manager', {sessionName: 'Dave Jones'});
+	// A proper implementation would instead pull from the database then populate the
+	// object, but this will do for now to check the basics of EJS
+	const radioStationUsers = {
+		djList: [
+			{lastName: 'Turner', firstName: 'Alex', popularArtist: 'Taylor Swift', popularGenre: 'Country', songsPlayed: 1},
+			{lastName: 'Turner', firstName: 'John', popularArtist: 'Jack Harlow', popularGenre: 'Pop', songsPlayed: 5}
+		]
+	};
+	res.render('pages/Manager', {sessionName: 'Dave Jones', userLists: radioStationUsers});
 });
 
 /*
