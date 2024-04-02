@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Radio Station - Producer</title>
+        <%- include('../partials/head'); %>
+		<script src="js/ProducerUpdated.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/manager.css">
+		<style>
+		section ul {
+			list-style-type: none;
+			text-align: center;
+		}
+		</style>
+	</head>
+	
+	<body>
+		<header>
+            <%- include('../partials/header'); %>
+		</header>
+		<nav>
+			<%- include('../partials/nav'); %>
+		</nav>
+		<main>
+		
+			<section id="play-list" style="width: 40%;">
+				<span>Good afternoon, James Hill.</span>
+				
+				
+				<div class="section-header">
+					<h1>Playlist</h1>
+					<div class="section-header-forms">
+						<label for="dj">Select DJ:</label>
+						<select name="dj" id="dj">
+							<option value="" selected disabled>DJs</option>
+						</select>
+						<span>&nbsp;</span>
+						<label for="dj">Select Timeslot:</label>
+						<select onchange="updateInfo()" name="timeslot" id="timeslot">
+							<option value="" selected disabled>Timeslots</option>
+							<option value="Timeslot 1">Timeslot 1</option>
+							<option value="Timeslot 2">Timeslot 2</option>
+						</select>
+					</div>
+				</div>
+				<div class="section-wrapper">
+					<ul id="playlist">
+                        <!--<li draggable="true" class="playlist">Song 1</li>
+                        <li draggable="true" class="playlist">Song 2</li>
+                        <li draggable="true" class="playlist">Song 3</li>
+                        <li draggable="true" class="playlist">Song 4</li>
+                        <li draggable="true" class="playlist">Song 5</li>
+                        <li draggable="true" class="playlist">Song 6</li>
+                        <li draggable="true" class="playlist">Song 7</li>
+                        <li draggable="true" class="playlist">Song 8</li>
+                        <li draggable="true" class="playlist">Song 9</li>
+                        <li draggable="true" class="playlist">Song 10</li>-->
+                    </ul>
+					<button id="open-add-announcement">Add Announcement</button>
+				</div>
+			</section>
+			
+			<section style="width: 5%; display: flex; align-items: center; justify-content: center;">
+				<button type="button" class="largerButton">&gt;</button>
+				<button type="button" class="largerButton">&lt;</button>
+				<button type="button" onclick="savePlaylist()" id="submission">Submit Playlist</button>
+			</section>
+			
+			<section id="song-list" style="width: 40%;">
+				<span>&nbsp;</span>
+				<h1 class="section-header">Song List</h1>
+				<div class="section-wrapper">
+					<ul id="songlist">
+                        <li draggable="true">Song 11</li>
+                        <li draggable="true">Song 12</li>
+                        <li draggable="true">Song 13</li>
+                        <li draggable="true">Song 14</li>
+                        <li draggable="true">Song 15</li>
+                        <li draggable="true">Song 16</li>
+                        <li draggable="true">Song 17</li>
+                        <li draggable="true">Song 18</li>
+                        <li draggable="true">Song 19</li>
+                    </ul>
+				</div>
+			</section>
+			
+		</main>
+		<footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+        <%- include('../partials/action-feedback'); %>
+		<%- include('../partials/html-window', {
+            winId: 'announcement-creator',
+            formAttributes: {id: 'announcement-form', method: '', action: ''},
+            winTitle: 'New Announcement',
+            innerHTML: `<label for="name">Name of Announcement: </label>
+            <input type="text" placeholder="Enter Name" name="announcement-name" id="announcement-name" required>
+            <label for="length">Length of Announcement (minutes): </label>
+            <input type="number" placeholder="Enter Length" name="announcement-length" id="announcement-length" required>`,
+            buttonsId:'announcement-buttons'
+        }); %>
+		
+	</body>
+</html>

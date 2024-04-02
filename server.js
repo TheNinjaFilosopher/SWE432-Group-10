@@ -37,12 +37,12 @@ app.get('/Manager', (req, res) => {
 	res.render('pages/Manager', {sessionName: 'Dave Jones', userLists: radioStationUsers});
 });
 
-/*
+
 // Producer page
 app.get('/Producer', (req, res) => {
 	res.render('pages/Producer');
 });
-*/
+
 
 app.listen(8080);
 console.log('Server is listening on port 8080');
