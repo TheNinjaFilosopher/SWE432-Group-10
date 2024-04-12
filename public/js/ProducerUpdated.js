@@ -1,72 +1,122 @@
-// After a bit more research, dragging elements between the same list should be doable, but I'm not going to bother with elements between lists
-// Forget the dragging for now, the most important thing is showing that announcements can be added to the list.
-// All songs should display the name and length of the song, nothing else is needed. Announcements should therefore be the same
-// In addition to making sure that submit form displays properly, I must also make sure that updateForm shows the announcements as well.
+// Now to implement duration into the timeslot. Can't play 150 minutes of songs in a 90 minute timeslot after all
+// Give each timeslot a duration variable, same for each song
 
-// Annoucements and different timeslots have been implemented. Now I only need to implement adding songs. That should be something done on DOMContentLoad
-// Have a function that runs through all the songs in a list, makes an unordered list of them, and attaches an Add button to each li
-// The add button will append the song to the playlist. That'll be the last thing I do before bed.
-// Finished. The code and comments will need to be cleaned up later today if I have time, but everything is looking good for now.
+//Duration is partly implemented, could be a bit better but it'll do for now
+//Now implement the remove buttons, then the up and down buttons
 
+//Done, can't think of much else I need to implement. I'll call it a day for now
 
 // List of announcements
 // [i].name is the name of the announcement, [i].length is the length of time
-// Alright, need to update this to have the playlists, as well as functionality to swap between them.
-// That should be as simple as an addToPlaylist function that moves from the songlist to the playlist, and then an removeFromPlaylist that moves from the playlist to the song list.
-// Reset the songlist for each timeslot (Or rather, reset the displayed songlist for each timeslot)
-// Additionally, include a selection list for DJs and for Timeslots
-// Just make them strings for now, they don't need any other information.
 const announcements = [];
 
-// When a DJ and a timeslot are combined, it's checked to see if that combination exists already
-// If not, it'll show a blank screen. If so, it'll show what's been saved so far.
-// A DJ can have multiple timeslots, but a timeslot can only have one DJ
-// If someone attempts to assign a timeslot that is already taken, do not let them.
-// Actually, allow them to do it, it should be fine, just need to alter the dj value for the timeslot in timeslots
+
 const djs = ["DJ 1", "DJ 2", "DJ 3"];
 const timeslots = ["Timeslot 1", "Timeslot 2", "Timeslot 3"];
 
-//Playlists will be like a dictionary, containing the DJ doing the playlist, as well as a list of songs and announcements in the playlist
-//Timeslot will be the key, current version will start with one timeslot already in.
-//Need to figure out display by today, so I can convert to EJS and node by tomorrow
-//Display should happen whenever the selections are changed, so need a function to apply to those.
-//Should also display the initial one upon window load.
-//A playlist should only be added to the one in 
 const playlists = new Map();
+//When the database is set up, create all of these from the start with a for loop that pulls from the database
+//One for each timeslot
 playlists.set(timeslots[0],{
 	dj: djs[0],
-	songs: []
+	songs: [],
+	duration: 90
 });
-//First test that I can display the playlist in a log with a method that changes things based on which playlist it is
+
+// This will likely come from a database in the final version.
 const songlist = ["Song 1","Song 2","Song 3","Song 4","Song 5","Song 6","Song 7","Song 8","Song 9","Song 10"];
 
+//Temporary Song List that contains durations, will come from database in final version
+const songList2 = [
+	{
+		name:"Song 1",
+		duration: 1
+	},
+	{
+		name:"Song 2",
+		duration: 2
+	},
+	{
+		name:"Song 3",
+		duration: 3
+	},
+	{
+		name:"Song 4",
+		duration: 4
+	},
+	{
+		name:"Song 5",
+		duration: 5
+	},
+	{
+		name:"Song 6",
+		duration: 6
+	},
+	{
+		name:"Song 7",
+		duration: 7
+	},
+	{
+		name:"Song 8",
+		duration: 8
+	},
+	{
+		name:"Song 9",
+		duration: 9
+	},
+	{
+		name:"Song 10",
+		duration: 10
+	},
+]
 function openForm(e) {
     //Upon opening the form, make sure the labels are clear and showcase the form
 	document.getElementById('announcement-name').value = '';
 	document.getElementById('announcement-length').value = '';
 	document.getElementById('announcement-creator').removeAttribute('style');
 }
-  
+
+
+//Add in up and down button to each added entry, same for the song thing
 function submitForm(e) {
     //Upon closing the form, save the values and add them to the announcements list
 	e.preventDefault();
 	const announcement = {
 		name: document.getElementById('announcement-name').value,
-		length: document.getElementById('announcement-length').value
+		duration: document.getElementById('announcement-length').value
 	};
 	//Add the announcement to announcements for later
 	//Then add it to the end of the playlist to be saved
 	//Then append the announcement to the end of the list
 	//Maybe remove the part about the playlist, since the submit should save it in anyway, and I don't want any repeats.
+	
 	let timeslotName = document.getElementById('timeslot');
 	let name = timeslotName.options[timeslotName.selectedIndex].text;
+	if(calculateDuration()+announcement.duration>playlists.get(name).duration){
+		const remainder = playlists.get(name).duration-calculateDuration();
+		showFeedback('failure',"Duration of announcement is too long to add to playlist. Remaining time is "+JSON.stringify(remainder));
+		return;
+	}
 	announcements.push(announcement);
-	playlists.get(name).songs.push(announcement.name);
+	playlists.get(name).songs.push(announcement);
 	let list = document.getElementById('playlist');
 	let li = document.createElement('li');
-	li.innerHTML = announcement.name;
+	li.innerHTML = announcement.name+" - "+announcement.duration;
 	li.classList = 'playlist';
 	li.draggable = true;
+	let removeButton = document.createElement('button');
+	removeButton.innerHTML = 'Remove';
+
+	removeButton.onclick = function () {
+		let timeslot = document.getElementById('timeslot');
+		let name = timeslot.options[timeslot.selectedIndex].text;
+		const playlist = playlists.get(name);
+		const listChildren = Array.from(list.childNodes);
+		const arrayIndex = listChildren.indexOf(li);
+		playlist.songs.splice(arrayIndex,1)
+		updateInfo();
+	}
+	li.appendChild(removeButton);
 	list.appendChild(li)
 	document.getElementById('announcement-creator').setAttribute('style', 'display: none');
 	showFeedback('success', 'Announcement submitted');
@@ -79,17 +129,9 @@ function closeForm(e) {
 	document.getElementById('announcement-creator').setAttribute('style', 'display: none');
 }
 
-// This alters the Playlist side of the screen to have an unordered list of all the songs in the current playlist.
-// First check if I can log the current playlist and its songs, then check if I can alter the list
-// Then put the songs into the list, with a for-loop or something.
+
 function updateInfo(e){
 	//e.preventDefault();
-	// Update the info in the playlists everytime the data is changed.
-	// This can be done by checking what songs are currently in the playlist at the time the change happens, then updating it in the playlists variable
-	// Better yet would be to have a button that handles this for me though, something like save playlist.
-	// I'll just add a button
-	// I can put it where the left and right buttons are, since I'm just going to remove them most likely
-	// Unless I can figure out how to do the dragging thing, we'll see.
 
 	//Use playlists.get(timeslots[0]).songs to get the list of songs, then iterate through the list to populate the list.
 	//Will need to set up the select first to make sure this works right, but I can set up the code for now
@@ -100,58 +142,117 @@ function updateInfo(e){
 	if(!playlists.has(name)){
 		playlists.set(name,{
 			dj: djs[0],
-			songs: []
+			songs: [],
+			duration: 90
 		})
 	}
-	const songsList = JSON.parse(JSON.stringify(playlists.get(name).songs));
-	//console.log("The songs list is: "+songsList);
-
-	//console.log(timeslotName.options[timeslotName.selectedIndex].text);
-	//console.log(e)
-	//console.log(e.options)
-	//console.log("After editing, the songsList is now: "+songsList);
+	//I'll need to alter this, need to make a for loop that gets all the song names instead
+	const playlist = playlists.get(name);
+	//const songsList = JSON.parse(JSON.stringify(playlist.songs));
+	const songsList2 = [];
+	for(let i = 0;i<playlist.songs.length;i++){
+		songsList2.push(playlist.songs[i].name + " - " + playlist.songs[i].duration);
+	}
+	//console.log("The playlist songs are below");
+	//console.log(playlist.songs);
+	//console.log("The songsList2 is below");
+	//console.log(songsList2);
 	let list = document.getElementById('playlist');
+
 	//List is constantly appending children, to fix this, just clear list after retrieving it
 	if(list){
 		while(list.firstChild){
 			list.removeChild(list.firstChild);
 		}
 	}
-	for(i = 0;i<songsList.length;i++){
+	//change this to a foreach instead, base it on songsList2
+	//But for now, create a button and apply it to the li
+	for(i = 0;i<songsList2.length;i++){
 		let li = document.createElement('li');
-		li.innerHTML = songsList[i];
+		li.innerHTML = songsList2[i];
 		li.classList = 'playlist';
 		li.draggable = true;
-		list.appendChild(li)
+		//removeButton is done, need to work on the ups and downs as well
+		let removeButton = document.createElement('button');
+		removeButton.innerHTML = 'Remove';
+
+		removeButton.onclick = function () {
+			let timeslot = document.getElementById('timeslot');
+			let name = timeslot.options[timeslot.selectedIndex].text;
+			const playlist = playlists.get(name);
+			const listChildren = Array.from(list.childNodes);
+			const arrayIndex = listChildren.indexOf(li);
+			playlist.songs.splice(arrayIndex,1)
+			updateInfo();
+		}
+		li.appendChild(removeButton);
+
+		let upButton = document.createElement('button');
+		upButton.innerHTML = 'Move Up';
+		upButton.onclick = function(){
+			//If not the first index, swap with the one above it
+			let timeslot = document.getElementById('timeslot');
+			let name = timeslot.options[timeslot.selectedIndex].text;
+			const playlist = playlists.get(name);
+			const songs = playlist.songs;
+			const listChildren = Array.from(list.childNodes);
+			//need arrayIndex and index-1
+			const arrayIndex = listChildren.indexOf(li);
+			//Part where the swap happens
+			//If the index is 0, no place to move up.
+			if(arrayIndex==0){
+				return;
+			}
+			//Now need a temp to get the variable
+			//Get it from playlist.songs
+			let temp = songs[arrayIndex];
+			songs[arrayIndex] = songs[arrayIndex-1];
+			songs[arrayIndex-1] = temp;
+			//Swap end
+			updateInfo();
+		}
+		li.appendChild(upButton);
+
+		let downButton = document.createElement('button');
+		downButton.innerHTML = 'Move Down';
+		downButton.onclick = function(){
+			//If not the last index, swap with the one below it.
+			let timeslot = document.getElementById('timeslot');
+			let name = timeslot.options[timeslot.selectedIndex].text;
+			const playlist = playlists.get(name);
+			const songs = playlist.songs;
+			const listChildren = Array.from(list.childNodes);
+			const arrayIndex = listChildren.indexOf(li);
+			//Part where the swap happens
+			if(arrayIndex==listChildren.length-1){
+				return;
+			}
+			let temp = songs[arrayIndex];
+			songs[arrayIndex] = songs[arrayIndex+1];
+			songs[arrayIndex+1] = temp;
+			//Swap end
+			updateInfo();
+		}
+		li.appendChild(downButton);
+
+		list.appendChild(li);
 	}
-	//No need for this, just append announcements to the end of the thing and if it gets reset, whatever
-	/*for(i = 0;i<announcements.length;i++){
-		let li = document.createElement('li');
-		li.innerHTML = announcements[i].name;
-		li.classList = 'playlist';
-		li.draggable = true;
-		list.appendChild(li)
-	}*/
 }
 
-//This saves what is currently in the unordered list of the playlist into the actual playlist, along with the DJ before confirming that it was saved.
-//Note to self, handle songs with 0 lists, just in case.
+//Maybe alter specific values instead of doing another set, that way i won't need to mess with the duration
 function savePlaylist(e){
 	const songs = document.querySelectorAll('li.playlist');
 	const songsList = [];
 	// Add all the elements into a list, then put that list into the playlists
-	//console.log(songs)
 	songs.forEach(song => songsList.push(song.innerHTML));
-	//console.log(songsList);
-	// End by setting the current timeslot as the key, and save the dj and songlist as an object
-	// Hardcoded for now, will get the current timeslot later.
-	// Not much need for hardcoding with how easy it is to get the current timeslot and DJ.
+
 	let timeslot = document.getElementById('timeslot');
 	let name = timeslot.options[timeslot.selectedIndex].text;
 	let dj = document.getElementById('dj');
 	playlists.set(name,{
 		dj: dj.options[dj.selectedIndex].text,
-		songs: songsList
+		songs: songsList,
+		duration: 90
 	});
 	
 	console.log(playlists.get(name).dj)
@@ -160,10 +261,56 @@ function savePlaylist(e){
 	showFeedback('success', feedback);
 }
 
+
+
+//This function calculates the duration of all songs in the current timeslot
+function calculateDuration(){
+	let timeslot = document.getElementById('timeslot');
+	let name = timeslot.options[timeslot.selectedIndex].text;
+	// Check to see if the timeslot being calculated exists
+	// Might not need to do this, depends on when I calculateDuration.
+	if(!playlists.has(name)){
+		playlists.set(name,{
+			dj: djs[0],
+			songs: [],
+			duration: 90
+		})
+	}
+
+	let durationTotal = 0;
+	//songs.forEach(song => songsList.push(song.innerHTML));
+	playlists.get(name).songs.forEach(song => durationTotal+=song.duration);
+	console.log(durationTotal);
+	return durationTotal;
+}
+
+
+
+//TODO: Populate the DJ and Timeslot selects automatically
 document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('open-add-announcement').addEventListener('click', openForm);
 	document.getElementById('announcement-form').addEventListener('submit', submitForm);
 	document.querySelector('.window .cancel').addEventListener('click', closeForm);
+
+	// const djs = ["DJ 1", "DJ 2", "DJ 3"];
+	// const timeslots = ["Timeslot 1", "Timeslot 2", "Timeslot 3"];
+	function selectFiller(){
+		let djList = document.getElementById('dj');
+		let timeslotList = document.getElementById('timeslot');
+		for(var i = 0;i<djs.length;i++){
+			var option = document.createElement("option");
+			option.value = djs[i];
+			option.text = djs[i];
+			djList.appendChild(option);
+		}
+		for(var i = 0;i<timeslots.length;i++){
+			var option = document.createElement("option");
+			option.value = timeslots[i];
+			option.text = timeslots[i];
+			timeslotList.appendChild(option);
+		}
+	}
+
 	function songButtons(){
 		//First get the ul for the songlist
 		let list = document.getElementById('songlist');
@@ -177,8 +324,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			let li = document.createElement('li');
 			let addButton = document.createElement('button');
 			addButton.innerHTML = "Add";
-			li.innerHTML = songlist[i];
+			// Change innerhtml to include duration, give the song a duration attribute I can use
+			li.innerHTML = songlist[i]+" - "+JSON.stringify(songList2[i].duration);
 			li.setAttribute('songName',songlist[i]);
+			li.setAttribute('duration',JSON.stringify(songList2[i].duration));
 			
 			//li.value = songlist[i];
 			//console.log(songlist[i]);
@@ -191,23 +340,29 @@ document.addEventListener('DOMContentLoaded', () => {
 				if(!playlists.has(name)){
 					playlists.set(name,{
 						dj: djs[0],
-						songs: []
+						songs: [],
+						duration: 90
 					})
 				}
-				playlists.get(name).songs.push(addButton.parentElement.getAttribute('songName'));
-				console.log(addButton.parentElement.getAttribute('songName'));
+				//This currently pushes a Song name when clicking add, but does not deal with duration
+				//Alter it to take a proper song object instead.
+				const song = {
+					name: addButton.parentElement.getAttribute('songName'),
+					duration: parseInt(addButton.parentElement.getAttribute('duration'))
+				}
+				if(calculateDuration()+song.duration>playlists.get(name).duration){
+					const remainder = playlists.get(name).duration-calculateDuration();
+					showFeedback('failure',"Duration of song is too long to add to playlist. Remaining time is "+JSON.stringify(remainder));
+					return;
+				}
+				playlists.get(name).songs.push(song);
+				console.log(song);
 				updateInfo();
 			}
 			li.appendChild(addButton);
 			list.appendChild(li);
-			/*
-			let li = document.createElement('li');
-			li.innerHTML = songsList[i];
-			li.classList = 'playlist';
-			li.draggable = true;
-			list.appendChild(li)
-			*/
 		}
 	}
+	selectFiller();
 	songButtons();
 });
