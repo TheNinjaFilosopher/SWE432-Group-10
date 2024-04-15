@@ -1,5 +1,9 @@
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
+
+const mongoClient = require('./handlers/dataConnector.js').connect();
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -37,12 +41,26 @@ app.get('/Manager', (req, res) => {
 	res.render('pages/Manager', {sessionName: 'Dave Jones', userLists: radioStationUsers});
 });
 
-
 // Producer page
 app.get('/Producer', (req, res) => {
 	res.render('pages/Producer');
 });
 
+// Preferably, this should be in a separate file.
+// Preferably, we also use mongoose instead
+app.get('/api/djs', (req, res) => {
+	mongoClient.db("RadioStation").collection("employees").find({position:"DJ"}).toArray()
+	.then(data => {
+		if (data.length == 0) return Promise.reject(new PermissionDenied());
+		res.json(JSON.parse(JSON.stringify(data)));
+	})
+	.catch(() => {
+		res.json({type: 'error', message: 'Unable to retrieve DJs'});
+	});
+});
 
-app.listen(8080);
-console.log('Server is listening on port 8080');
+const port = process.env.port;
+
+app.listen(port, () => {
+	console.log(`Server is listening on port ${port}`);
+});

@@ -6,6 +6,16 @@
 
 //Done, can't think of much else I need to implement. I'll call it a day for now
 
+//Time to start implementing mongodb for the database
+//var mongo = require('mongodb');
+//The below should connect properly, so now all I need to do is test if the different parts are what they should be
+//Make a temporary button
+//import { MongoClient } from 'mongodb';
+
+//const client = new MongoClient(MONGO_URI);
+
+
+
 // List of announcements
 // [i].name is the name of the announcement, [i].length is the length of time
 const announcements = [];
@@ -69,6 +79,50 @@ const songList2 = [
 		duration: 10
 	},
 ]
+
+// Test to see how to retrive data
+function dbTests() {
+	fetch('/api/djs')
+	.then(res => res.json())
+	.then(data => {
+		console.log(data);
+	});
+}
+
+/*
+//Test to see how to retrieve/add data
+async function dbTests(){
+	const uri = MONGO_URI;
+	const client = new MongoClient(uri);
+	try {
+		await client.connect();
+		await listDJs(client);
+	}
+	catch(e){
+		console.error(e);
+	}
+	finally{
+		await client.close();
+	}
+}
+
+async function listDJs(client){
+	const djList = await client.db("RadioStation").collection("employees").find({position:"DJ"});
+	const results = await djList.toArray();
+	if(results.length>0){
+		console.log("Found DJ(s):");
+		results.forEach((result)=>{
+			console.log();
+			console.log(`name: ${result.name}`);
+			console.log(`login: ${result.login}`);
+			console.log(`start date: ${result.startDate}`);
+		});
+	}
+	else{
+		console.log("No DJs found.")
+	}
+}*/
+
 function openForm(e) {
     //Upon opening the form, make sure the labels are clear and showcase the form
 	document.getElementById('announcement-name').value = '';
@@ -94,7 +148,7 @@ function submitForm(e) {
 	let name = timeslotName.options[timeslotName.selectedIndex].text;
 	if(calculateDuration()+announcement.duration>playlists.get(name).duration){
 		const remainder = playlists.get(name).duration-calculateDuration();
-		showFeedback('failure',"Duration of announcement is too long to add to playlist. Remaining time is "+JSON.stringify(remainder));
+		showFeedback('error',"Duration of announcement is too long to add to playlist. Remaining time is "+JSON.stringify(remainder));
 		return;
 	}
 	announcements.push(announcement);
@@ -240,6 +294,7 @@ function updateInfo(e){
 }
 
 //Maybe alter specific values instead of doing another set, that way i won't need to mess with the duration
+//Now that I'm planning on using the database, this needs to instead save playlists to the database.
 function savePlaylist(e){
 	const songs = document.querySelectorAll('li.playlist');
 	const songsList = [];
@@ -260,8 +315,6 @@ function savePlaylist(e){
 	const feedback = 'Playlists saved at '+name+' with '+playlists.get(name).dj;
 	showFeedback('success', feedback);
 }
-
-
 
 //This function calculates the duration of all songs in the current timeslot
 function calculateDuration(){
@@ -284,32 +337,33 @@ function calculateDuration(){
 	return durationTotal;
 }
 
+// const djs = ["DJ 1", "DJ 2", "DJ 3"];
+// const timeslots = ["Timeslot 1", "Timeslot 2", "Timeslot 3"];
+function selectFiller(){
+	let djList = document.getElementById('dj');
+	let timeslotList = document.getElementById('timeslot');
+	for(var i = 0;i<djs.length;i++){
+		var option = document.createElement("option");
+		option.value = djs[i];
+		option.text = djs[i];
+		djList.appendChild(option);
+	}
+	for(var i = 0;i<timeslots.length;i++){
+		var option = document.createElement("option");
+		option.value = timeslots[i];
+		option.text = timeslots[i];
+		timeslotList.appendChild(option);
+	}
+}
 
-
-//TODO: Populate the DJ and Timeslot selects automatically
+//TODO: Populate the DJ and Timeslot selects automatically with the names in the database.
 document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('open-add-announcement').addEventListener('click', openForm);
 	document.getElementById('announcement-form').addEventListener('submit', submitForm);
 	document.querySelector('.window .cancel').addEventListener('click', closeForm);
+	
 
-	// const djs = ["DJ 1", "DJ 2", "DJ 3"];
-	// const timeslots = ["Timeslot 1", "Timeslot 2", "Timeslot 3"];
-	function selectFiller(){
-		let djList = document.getElementById('dj');
-		let timeslotList = document.getElementById('timeslot');
-		for(var i = 0;i<djs.length;i++){
-			var option = document.createElement("option");
-			option.value = djs[i];
-			option.text = djs[i];
-			djList.appendChild(option);
-		}
-		for(var i = 0;i<timeslots.length;i++){
-			var option = document.createElement("option");
-			option.value = timeslots[i];
-			option.text = timeslots[i];
-			timeslotList.appendChild(option);
-		}
-	}
+	
 
 	function songButtons(){
 		//First get the ul for the songlist
@@ -352,7 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 				if(calculateDuration()+song.duration>playlists.get(name).duration){
 					const remainder = playlists.get(name).duration-calculateDuration();
-					showFeedback('failure',"Duration of song is too long to add to playlist. Remaining time is "+JSON.stringify(remainder));
+					showFeedback('error',"Duration of song is too long to add to playlist. Remaining time is "+JSON.stringify(remainder));
 					return;
 				}
 				playlists.get(name).songs.push(song);
