@@ -59,6 +59,28 @@ app.get('/api/djs', (req, res) => {
 	});
 });
 
+app.get('/api/timeslots', (req, res) => {
+	mongoClient.db("RadioStation").collection("Playlists").find().toArray()
+	.then(data => {
+		if (data.length == 0) return Promise.reject(new PermissionDenied());
+		res.json(JSON.parse(JSON.stringify(data)));
+	})
+	.catch(() => {
+		res.json({type: 'error', message: 'Unable to retrieve Timeslots'});
+	});
+});
+
+app.get('/api/songs', (req, res) => {
+	mongoClient.db("RadioStation").collection("Songs").find().toArray()
+	.then(data => {
+		if (data.length == 0) return Promise.reject(new PermissionDenied());
+		res.json(JSON.parse(JSON.stringify(data)));
+	})
+	.catch(() => {
+		res.json({type: 'error', message: 'Unable to retrieve Timeslots'});
+	});
+});
+
 const port = process.env.port;
 
 app.listen(port, () => {
