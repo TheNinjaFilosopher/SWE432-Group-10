@@ -32,7 +32,8 @@ app.get('/DJEditor', (req, res) => {
 // Manager page
 app.get('/Manager', (req, res) => {
 	let djs;
-	mongoClient.db("RadioStation").collection("employees").find({position:"DJ"}).toArray()
+	mongoClient.db("RadioStation").collection("employees")
+	.find({position:"DJ"}).project({_id: 1, name: 1}).toArray()
 	.then(data => djs = data)
 	.catch(() => {
 		// TODO handle case where DJ's can't be pulled from DB
@@ -51,7 +52,8 @@ app.get('/Producer', (req, res) => {
 // Preferably, this should be in a separate file.
 // Preferably, we also use mongoose instead
 app.get('/api/djs', (req, res) => {
-	mongoClient.db("RadioStation").collection("employees").find({position:"DJ"}).toArray()
+	mongoClient.db("RadioStation").collection("employees")
+	.find({position:"DJ"}).toArray()
 	.then(data => {
 		if (data.length == 0) return Promise.reject(new PermissionDenied());
 		res.json(JSON.parse(JSON.stringify(data)));
@@ -62,12 +64,14 @@ app.get('/api/djs', (req, res) => {
 });
 
 app.get('/api/djs/:id', (req, res) => {
-	mongoClient.db("RadioStation").collection("employees").findOne({position:"DJ", "_id":new ObjectId(req.params.id)})
+	mongoClient.db("RadioStation").collection("employees")
+	.findOne({position: "DJ", _id: new ObjectId(req.params.id)})
 	.then(data => res.json(data));
 });
 
 app.get('/api/timeslots', (req, res) => {
-	mongoClient.db("RadioStation").collection("Playlists").find().toArray()
+	mongoClient.db("RadioStation").collection("Playlists")
+	.find().toArray()
 	.then(data => {
 		if (data.length == 0) return Promise.reject(new PermissionDenied());
 		res.json(JSON.parse(JSON.stringify(data)));
@@ -77,8 +81,15 @@ app.get('/api/timeslots', (req, res) => {
 	});
 });
 
+app.get('/api/timeslots/djs/:id', (req, res) => {
+	mongoClient.db("RadioStation").collection("Playlists")
+	.findOne({'DJ._id': new ObjectId(req.params.id)}, {projection: {Timeslot: 1}})
+	.then(data => res.json(data));
+});
+
 app.get('/api/songs', (req, res) => {
-	mongoClient.db("RadioStation").collection("Songs").find().toArray()
+	mongoClient.db("RadioStation").collection("Songs")
+	.find().toArray()
 	.then(data => {
 		if (data.length == 0) return Promise.reject(new PermissionDenied());
 		res.json(JSON.parse(JSON.stringify(data)));
