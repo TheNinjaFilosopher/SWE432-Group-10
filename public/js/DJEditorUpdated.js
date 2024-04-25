@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentplaylist = null;
     let playlistdata = null;
     let songdata = null;
-    const playlistIndex = window.localStorage.getItem('playlistIndex');
+    const playlistIndex = window.sessionStorage.getItem('playlistIndex');
 
     let songslots = document.getElementById('song-slots').querySelector('.section-wrapper').querySelector('.slots');
     let searchslots = document.getElementById('search-slots').querySelector('.section-wrapper').querySelector('.slots');
@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const cancelbutton = document.getElementById('cancelbutton');
     const savebutton = document.getElementById('savebutton');
     const searchbutton = document.getElementById('searchbutton');
+    let savebuttonclicked = false;
     let songlistcopy = [];
 
     console.log(playlistIndex);
@@ -178,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
     searchslots.addEventListener('click', function (e) {
         if (e.target && e.target.nodeName == "BUTTON") {
             if (e.target.textContent === 'Add') {
-                
+
                 let songname = e.target.parentNode.firstChild.textContent.split(' - ')[0];
 
                 for (let i = 0; i < songdata.length; i++) {
@@ -199,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 displayPlaylist();
             } else if (e.target.textContent === 'View') {
-                
+
                 let playlistID = e.target.className;
                 let resultsonglist = [];
 
@@ -222,19 +223,48 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     cancelbutton.addEventListener('click', function () {
-        window.localStorage.setItem('messageType', 'warning');
-        window.localStorage.setItem('message', 'Playlist changes discarded.');
+        window.sessionStorage.setItem('messageType', 'warning');
+        window.sessionStorage.setItem('message', 'Playlist changes discarded.');
         window.location.href = "DJ";
     });
 
     savebutton.addEventListener('click', function () {
 
         //save data to database
-        //not implemented yet
+        
+        if (savebuttonclicked) {
+            return;
+        }
+        savebuttonclicked = true;
 
-        window.localStorage.setItem('messageType', 'success');
-        window.localStorage.setItem('message', 'Playlist saving not implemented yet.');
-        window.location.href = "DJ";
+        fetch('/api/playlistedit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                playlist: songlistcopy,
+                id: currentplaylist.ID
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.type === 'success') {
+                    window.sessionStorage.setItem('messageType', 'success');
+                    window.sessionStorage.setItem('message', 'Playlist has saved.');
+                    window.location.href = "DJ";
+                } else {
+                    window.sessionStorage.setItem('messageType', 'error');
+                    window.sessionStorage.setItem('message', 'Error saving playlist.');
+                    window.location.href = "DJ";
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                window.sessionStorage.setItem('messageType', 'error');
+                window.sessionStorage.setItem('message', 'Error saving playlist.');
+                window.location.href = "DJ";
+            });
     });
 
     searchbutton.addEventListener('click', function () {
@@ -257,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (let i = 0; i < playlistdata.length; i++) {
                     for (let j = 0; j < playlistdata[i].Songlist.length; j++) {
                         if (playlistdata[i].Songlist[j].songName.toLowerCase().includes(input)) {
-                            if (playlistIndex !== i){
+                            if (playlistIndex !== i) {
                                 playlistresults.push(playlistdata[i]);
                             }
                             break;
@@ -276,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             displaySearchResults(songresults, playlistresults);
-           
+
         }
 
     });

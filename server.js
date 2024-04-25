@@ -9,6 +9,8 @@ const ObjectId = require('mongodb').ObjectId;
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
+app.use(express.json())
+
 // make express look in the public directory for assets (css/js/img)
 app.use(express.static(__dirname + '/public'));
 
@@ -87,6 +89,20 @@ app.get('/api/songs', (req, res) => {
 		res.json({type: 'error', message: 'Unable to retrieve Songs'});
 	});
 });
+
+//edit a playlist of songs
+app.post('/api/playlistedit', (req, res) => {
+	let playlist = req.body.playlist;
+	let id = req.body.id;
+	mongoClient.db("RadioStation").collection("Playlists").updateOne({"ID" : id}, {$set: {"Songlist": playlist}})
+	.then(() => {
+		res.json({type: 'success', message: 'Playlist updated'});
+	})
+	.catch(() => {
+		res.json({type: 'error', message: 'Unable to update playlist'});
+	});
+});
+
 
 const port = process.env.port;
 

@@ -33,10 +33,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	
 	//Display messages from Editor if found
-	if(window.localStorage.getItem('message') !== null) {
-		showFeedback(window.localStorage.getItem('messageType'), window.localStorage.getItem('message'));
-		window.localStorage.removeItem('message');
-		window.localStorage.removeItem('messageType');
+	if(window.sessionStorage.getItem('message') !== null) {
+		showFeedback(window.sessionStorage.getItem('messageType'), window.sessionStorage.getItem('message'));
+		window.sessionStorage.clear();
 	}
 
 	dateBox.addEventListener('change', () => {
@@ -116,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 
 		//pass data to DJEditor
-		window.localStorage.setItem('playlistIndex', currentplaylistIndex);
+		window.sessionStorage.setItem('playlistIndex', currentplaylistIndex);
 		window.location.href = 'DJEditor';
 	});
 });
