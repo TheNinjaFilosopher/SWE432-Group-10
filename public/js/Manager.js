@@ -88,7 +88,7 @@ function updateInfo() {
 		showFeedback('info', `${data.name}'s time slot selected`);
 	})
 	.catch(() => showFeedback('error', `Failed to retrieve DJ with id ${djId}. The DJ may not exist.`));
-	
+	/* test */
 	let currDJ;
 	
 	// clear previous checked time slots
