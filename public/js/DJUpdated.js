@@ -4,8 +4,34 @@ document.addEventListener('DOMContentLoaded', function () {
 	const timeslots = document.getElementById('time-slots').querySelector('.section-wrapper');
 	const songslots = document.getElementById('song-slots').querySelector('.section-wrapper');
 	const editButton = document.getElementById('editbutton');
+	let allplaylists = [];
 	let currentplaylistIndex = -1;
+	let currentdate = '';
 
+	//Get current DJ
+	let currentDJ = '';
+	fetch('/api/djs')
+		.then(response => response.json())
+		.then(data => {
+			currentDJ = data[0].name;
+			document.getElementById('djgreeting').textContent = "Welcome, " + currentDJ + "!";
+			//make it the first DJ for now
+		})
+		.catch(err => {
+			console.log(err);
+		});
+	
+
+	//Get all playlists
+	fetch('/api/timeslots')
+		.then(response => response.json())
+		.then(data => {
+			allplaylists = data;
+		})
+		.catch(err => {
+			console.log(err);
+		});
+	
 	//Display messages from Editor if found
 	if(window.localStorage.getItem('message') !== null) {
 		showFeedback(window.localStorage.getItem('messageType'), window.localStorage.getItem('message'));
@@ -14,7 +40,18 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	dateBox.addEventListener('change', () => {
-		const date = dateBox.value;
+		currentdate = dateBox.value;
+
+		// turn into date format: mm/dd/yyyy
+		let month = currentdate.split('-')[1];
+		let day = currentdate.split('-')[2];
+		let year = currentdate.split('-')[0];
+		currentdate = month + '/' + day + '/' + year;
+		
+		//remove leading 0	
+		if (currentdate.startsWith('0')) {
+			currentdate = currentdate.substring(1);
+		}
 
 		//clear slots
 		while (timeslots.firstChild) {
@@ -27,10 +64,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		//console.log('Selected ' + date);
 		for (playlist of allplaylists) {
-			if (playlist.assignedDate === date) {
+			if (playlist.Timeslot.day === currentdate && playlist.DJ.name === currentDJ) {
 				const btn = document.createElement('button');
 				btn.className = 'timeslot';
-				btn.textContent = `${playlist.playlistStartTime} - ${playlist.playlistEndTime}`;
+				btn.textContent = `${playlist.Timeslot.start} - ${playlist.Timeslot.end}`;
 				timeslots.appendChild(btn);
 			}
 		}
@@ -49,13 +86,16 @@ document.addEventListener('DOMContentLoaded', function () {
 			currentplaylistIndex = -1;
 
 			for (let i = 0; i < allplaylists.length; i++) {
-				if (dateBox.value === allplaylists[i].assignedDate && starttime === allplaylists[i].playlistStartTime && endtime === allplaylists[i].playlistEndTime) {
-					for (let j = 0; j < allplaylists[i].songs.length; j++) {
+				if (currentdate === allplaylists[i].Timeslot.day && 
+					starttime === allplaylists[i].Timeslot.start && 
+					endtime === allplaylists[i].Timeslot.end
+					&& allplaylists[i].DJ.name === currentDJ) {
+					currentplaylistIndex = i;
+					for (let j = 0; j < allplaylists[i].Songlist.length; j++) {
 						const song = document.createElement('button');
-						song.textContent = allplaylists[i].songs[j].title + ' - ' + allplaylists[i].songs[j].artist;
+						song.textContent = allplaylists[i].Songlist[j].songName + ' - ' + allplaylists[i].Songlist[j].artist.artistName;
 						song.className = 'songslot';
-						songslots.appendChild(song);
-						currentplaylistIndex = i;
+						songslots.appendChild(song);	
 					}
 				}
 			}
