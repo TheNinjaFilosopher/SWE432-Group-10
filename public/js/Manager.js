@@ -81,6 +81,14 @@ function confirmTimes(e) {
 
 function updateInfo() {
 	const djId = document.getElementById('dj').value;
+	fetch(`/api/djs/${djId}`)
+	.then(res => res.json())
+	.then(data => {
+		console.log(data);
+		showFeedback('info', `${data.name}'s time slot selected`);
+	})
+	.catch(() => showFeedback('error', `Failed to retrieve DJ with id ${djId}. The DJ may not exist.`));
+	
 	let currDJ;
 	
 	// clear previous checked time slots
