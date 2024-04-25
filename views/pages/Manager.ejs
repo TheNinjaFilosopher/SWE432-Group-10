@@ -25,8 +25,8 @@
 						<label for="dj">Select DJ:</label>
 						<select onchange="updateInfo()" name="dj" id="dj">
 							<option value="" selected disabled>DJs</option>
-							<% for (let i = 0; i < 2; i++) { %>
-								<option value="<%= i + 1 %>"><%= `${userLists.djList[i].firstName} ${userLists.djList[i].lastName}` %></option>
+							<% for (dj of djList) { %>
+								<option value="<%= dj._id %>"><%= dj.name %></option>
 							<% } %>
 						</select>
 					</div>

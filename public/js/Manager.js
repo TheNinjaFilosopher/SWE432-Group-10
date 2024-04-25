@@ -122,15 +122,4 @@ document.addEventListener('DOMContentLoaded', function() {
 	populatePlaytimes();
 	timeSlotsSection = document.getElementById('time-slots');
 	Object.seal(timeSlotsSection);
-	
-	// const reportsSection = document.getElementById('dj-reports');
-	
-	// populate DJ dropdown
-	/*const djDropdown = document.getElementById('dj');
-	for (dj of djs) {
-		const listing = document.createElement('option');
-		listing.value = dj.id;
-		listing.textContent = `${dj.firstName} ${dj.lastName}`;
-		djDropdown.insertAdjacentElement('beforeend', listing);
-	}*/
 });

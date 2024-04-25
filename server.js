@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 
 const mongoClient = require('./handlers/dataConnector.js').connect();
+const ObjectId = require('mongodb').ObjectId;
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -30,15 +31,16 @@ app.get('/DJEditor', (req, res) => {
 
 // Manager page
 app.get('/Manager', (req, res) => {
-	// A proper implementation would instead pull from the database then populate the
-	// object, but this will do for now to check the basics of EJS
-	const radioStationUsers = {
-		djList: [
-			{lastName: 'Turner', firstName: 'Alex', popularArtist: 'Taylor Swift', popularGenre: 'Country', songsPlayed: 1},
-			{lastName: 'Turner', firstName: 'John', popularArtist: 'Jack Harlow', popularGenre: 'Pop', songsPlayed: 5}
-		]
-	};
-	res.render('pages/Manager', {sessionName: 'Dave Jones', userLists: radioStationUsers});
+	let djs;
+	mongoClient.db("RadioStation").collection("employees").find({position:"DJ"}).toArray()
+	.then(data => djs = data)
+	.catch(() => {
+		// TODO handle case where DJ's can't be pulled from DB
+		djs = {};
+	})
+	.finally(() => {
+		res.render('pages/Manager', {sessionName: 'Dave Jones', djList: djs});
+	});
 });
 
 // Producer page
@@ -59,6 +61,11 @@ app.get('/api/djs', (req, res) => {
 	});
 });
 
+app.get('/api/djs/:id', (req, res) => {
+	mongoClient.db("RadioStation").collection("employees").findOne({position:"DJ", "_id":new ObjectId(req.params.id)})
+	.then(data => res.json(data));
+});
+
 app.get('/api/timeslots', (req, res) => {
 	mongoClient.db("RadioStation").collection("Playlists").find().toArray()
 	.then(data => {
@@ -77,7 +84,7 @@ app.get('/api/songs', (req, res) => {
 		res.json(JSON.parse(JSON.stringify(data)));
 	})
 	.catch(() => {
-		res.json({type: 'error', message: 'Unable to retrieve Timeslots'});
+		res.json({type: 'error', message: 'Unable to retrieve Songs'});
 	});
 });
 
