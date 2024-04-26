@@ -63,10 +63,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		//console.log('Selected ' + date);
 		for (playlist of allplaylists) {
-			if (playlist.Timeslot.day === currentdate && playlist.DJ.name === currentDJ) {
+			if (playlist.Timeslot.day === currentdate){// && playlist.DJ.name === currentDJ) {
 				const btn = document.createElement('button');
 				btn.className = 'timeslot';
-				btn.textContent = `${playlist.Timeslot.start} - ${playlist.Timeslot.end}`;
+				btn.id = playlist.DJ.name;
+				btn.textContent = `${playlist.Timeslot.start} - ${playlist.Timeslot.end} - (${playlist.DJ.name})`;
 				timeslots.appendChild(btn);
 			}
 		}
@@ -77,7 +78,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 			let starttime = e.target.textContent.split(' - ')[0];
 			let endtime = e.target.textContent.split(' - ')[1];
-
+			let djselected = e.target.id;
+			
 			while (songslots.firstChild) {
 				songslots.removeChild(songslots.firstChild);
 			}
@@ -88,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				if (currentdate === allplaylists[i].Timeslot.day && 
 					starttime === allplaylists[i].Timeslot.start && 
 					endtime === allplaylists[i].Timeslot.end
-					&& allplaylists[i].DJ.name === currentDJ) {
+					&& allplaylists[i].DJ.name == djselected) {
 					currentplaylistIndex = i;
 					for (let j = 0; j < allplaylists[i].Songlist.length; j++) {
 						const song = document.createElement('button');
@@ -96,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						song.className = 'songslot';
 						songslots.appendChild(song);	
 					}
+					break;
 				}
 			}
 		}
