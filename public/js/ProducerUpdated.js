@@ -175,6 +175,9 @@ function updateInfo(){
 //Something like "Song Name by Artist Released on ReleaseDate - Duration:Duration"
 function savePlaylistToDatabase(){
 	const songs = document.querySelectorAll('li.playlist');
+	const fetchID = '/api/updatePlaylist/'+
+	fetch(fetchID)
+	//Only save the DJ and the Songs array
 }
 
 function savePlaylist(e){
