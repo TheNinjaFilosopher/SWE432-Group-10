@@ -14,7 +14,7 @@
 //const announcements = [];
 
 const playlists = new Map();
-
+var ListOfDJs = []
 
 function openForm(e) {
     //Upon opening the form, make sure the labels are clear and showcase the form
@@ -33,18 +33,20 @@ function openForm(e) {
 function submitForm(e) {
     //Upon closing the form, save the values and add them to the announcements list
 	e.preventDefault();
+	var today = new Date().toLocaleDateString();
 	const announcement = {
-		name: document.getElementById('announcement-name').value,
-		duration: parseInt(document.getElementById('announcement-length').value),
-		artist: "RADIO STATION",
-		releaseDate: "CURRENT DATE",
-		album: ""
+		songName: document.getElementById('announcement-name').value,
+		songLength: parseInt(document.getElementById('announcement-length').value),
+		releaseDate: today,
+		artist: {
+			artistName: "RADIOSTATION"
+		}
 	};
 	
 	let timeslotName = document.getElementById('timeslot');
 	let name = timeslotName.options[timeslotName.selectedIndex].text;
 	let duration = calculateDuration();
-	if((duration+announcement.duration)>playlists.get(name).duration){
+	if((duration+announcement.songLength)>playlists.get(name).duration){
 		const remainder = playlists.get(name).duration-duration;
 		showFeedback('error',"Duration of announcement is too long to add to playlist. Remaining time is "+JSON.stringify(remainder));
 		return;
@@ -79,7 +81,8 @@ function updateInfo(){
 	const songs = playlist.songs;
 	const songsList2 = [];
 	for(let i = 0;i<songs.length;i++){
-		songDisplay = songs[i].name+" by "+songs[i].artist+" Released on "+songs[i].releaseDate+" - Duration: "+JSON.stringify(songs[i].duration);
+		songDisplay = songs[i].songName+" by "+songs[i].artist.artistName+" Released on "+songs[i].releaseDate+" - Duration: "+JSON.stringify(songs[i].songLength);
+		//console.log(songs.name)
 		songsList2.push(songDisplay);
 	}
 
@@ -91,6 +94,10 @@ function updateInfo(){
 			list.removeChild(list.firstChild);
 		}
 	}
+	//let dj = document.getElementById('dj');
+	//let djName = dj.options[dj.selectedIndex].text;
+	//console.log(dj.options)
+	//console.log(dj.selectedIndex)
 	//change this to a foreach instead, base it on songsList2
 	//But for now, create a button and apply it to the li
 	for(i = 0;i<songsList2.length;i++){
@@ -174,12 +181,40 @@ function updateInfo(){
 //Maybe I should alter things to display more than just name and duration
 //Something like "Song Name by Artist Released on ReleaseDate - Duration:Duration"
 function savePlaylistToDatabase(){
-	const songs = document.querySelectorAll('li.playlist');
-	const fetchID = '/api/updatePlaylist/'+
-	fetch(fetchID)
+	//const songs = document.querySelectorAll('li.playlist');
+	//const fetchID = '/api/updatePlaylist/'
+	let timeslot = document.getElementById('timeslot');
+	let name = timeslot.options[timeslot.selectedIndex].text;
+	let dj = document.getElementById('dj');
+	let djName = dj.options[dj.selectedIndex].text;
+	if(name=="Timeslots" || djName=="DJs"){
+		showFeedback("warning","Please select a timeslot or a DJ first");
+		return;
+	}
+	//playlists.get(name).songs
+	fetch('/api/playlistedit', {
+		method: 'POST',
+		headers:{
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+                playlist: playlists.get(name).songs,
+                id: playlists.get(name).ID,
+				dj: ListOfDJs[dj.selectedIndex-1]//playlists.get(name).dj
+        })
+	})
+	.then(res => res.json())
+	.then(data => {
+		if(data.type ==='success'){
+			console.log("Saved Playlist")
+		}
+		else{
+			console.log("Failed to save Playlist")
+		}
+	})
 	//Only save the DJ and the Songs array
 }
-
+/*
 function savePlaylist(e){
 	const songs = document.querySelectorAll('li.playlist');
 	const songsList = [];
@@ -203,25 +238,24 @@ function savePlaylist(e){
 	console.log(playlists.get(name).songs)
 	const feedback = 'Playlists saved at '+name+' with '+playlists.get(name).dj;
 	showFeedback('success', feedback);
-}
+}*/
 
 //This function calculates the duration of all songs in the current timeslot
 function calculateDuration(){
 	let timeslot = document.getElementById('timeslot');
 	let name = timeslot.options[timeslot.selectedIndex].text;
 	let durationTotal = 0;
-	playlists.get(name).songs.forEach(song => durationTotal+=song.duration);
+	playlists.get(name).songs.forEach(song => durationTotal+=song.songLength);
 	return durationTotal;
 }
 
-function dbTests() {
+function getDJs() {
 	fetch('/api/djs')
 	.then(res => res.json())
 	.then(data => {
 		//Change of plans, attempt selectFiller with params and call in dbTests
-		var ListOfDJs = []
 		data.forEach((d)=>{
-			ListOfDJs.push(d.name);
+			ListOfDJs.push(d);
 		});
 		djFiller(ListOfDJs);
 	});
@@ -231,13 +265,14 @@ function djFiller(list){
 	let djList = document.getElementById('dj');
 	for(var i = 0;i<list.length;i++){
 		var option = document.createElement("option");
-		option.value = list[i];
-		option.text = list[i];
+		option.value = list[i].name;
+		option.text = list[i].name;
 		djList.appendChild(option);
 	}
 }
 
 function getTimeslots(){
+	//Instead of songlistcopy, get
 	fetch('/api/timeslots')
 	.then(res => res.json())
 	.then(data => {
@@ -253,15 +288,19 @@ function getTimeslots(){
 			const songArray = [];
 			for(i = 0;i<d.Songlist.length;i++){
 				songArray.push({
-					name: d.Songlist[i].songName,
-					duration: d.Songlist[i].songLength
+					songName: d.Songlist[i].songName,
+					songLength: d.Songlist[i].songLength,
+					releaseDate: d.Songlist[i].releaseDate,
+					artist: d.Songlist[i].artist
 				})
 			}
 			playlists.set(name,{
 				dj: d.DJ,
 				songs: songArray,
-				duration: d.Timeslot.length
+				duration: d.Timeslot.length,
+				ID: d.ID
 			})
+			console.log(playlists.get(name).dj)
 		});
 		timeslotFiller(ListOfTimeslots);
 	});
@@ -324,13 +363,14 @@ function songFiller(songlist){
 			}
 			
 			const song = {
-				name: addButton.parentElement.getAttribute('songName'),
-				duration: parseInt(addButton.parentElement.getAttribute('duration')),
-				artist: addButton.parentElement.getAttribute('artist'),
-				album: addButton.parentElement.getAttribute('album'),
-				releaseDate: addButton.parentElement.getAttribute('releaseDate')
+				songName: addButton.parentElement.getAttribute('songName'),
+				songLength: parseInt(addButton.parentElement.getAttribute('duration')),
+				releaseDate: addButton.parentElement.getAttribute('releaseDate'),
+				artist: {
+					artistName: addButton.parentElement.getAttribute('artist')
+				}
 			}
-			if(calculateDuration()+song.duration>playlists.get(name).duration){
+			if(calculateDuration()+song.songLength>playlists.get(name).duration){
 				const remainder = playlists.get(name).duration-calculateDuration();
 				showFeedback('error',"Duration of song is too long to add to playlist. Remaining time is "+JSON.stringify(remainder));
 				return;
@@ -349,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('announcement-form').addEventListener('submit', submitForm);
 	document.querySelector('.window .cancel').addEventListener('click', closeForm);
 
-	dbTests();
+	getDJs();
 	getTimeslots();
 	getSongs();
 });

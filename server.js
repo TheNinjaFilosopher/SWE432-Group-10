@@ -105,7 +105,8 @@ app.get('/api/songs', (req, res) => {
 app.post('/api/playlistedit', (req, res) => {
 	let playlist = req.body.playlist;
 	let id = req.body.id;
-	mongoClient.db("RadioStation").collection("Playlists").updateOne({"ID" : id}, {$set: {"Songlist": playlist}})
+	let dj = req.body.dj;
+	mongoClient.db("RadioStation").collection("Playlists").updateOne({"ID" : id}, {$set: {"Songlist": playlist, "DJ":dj}})
 	.then(() => {
 		res.json({type: 'success', message: 'Playlist updated'});
 	})
