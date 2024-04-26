@@ -244,7 +244,8 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify({
                 playlist: songlistcopy,
-                id: currentplaylist.ID
+                id: currentplaylist.ID,
+                dj: currentplaylist.DJ
             })
         })
             .then(response => response.json())
