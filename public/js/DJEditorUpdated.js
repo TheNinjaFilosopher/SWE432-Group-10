@@ -286,6 +286,11 @@ document.addEventListener('DOMContentLoaded', function () {
             //if the search term is found in a song in the playlist, add the playlist to the results
             if (prevplaylistToggle.checked) {
                 for (let i = 0; i < playlistdata.length; i++) {
+
+                    if (!playlistdata[i].Songlist) {
+                        continue;
+                    }
+
                     for (let j = 0; j < playlistdata[i].Songlist.length; j++) {
                         if (playlistdata[i].Songlist[j].songName.toLowerCase().includes(input)) {
                             if (playlistIndex !== i) {
