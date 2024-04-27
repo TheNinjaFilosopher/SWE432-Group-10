@@ -23,8 +23,9 @@ for (let i = 0; i < 2; i++) {
  * ==========================
  */
 
+const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
 function populatePlaytimes() {
-	const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 	const firstHalfInterval = document.getElementById("time-slots").querySelector("tbody").lastElementChild;
 	// go through half-hour intervals
 	for (let i = 47; i > 0; i--) {
@@ -65,58 +66,117 @@ function confirmTimes(e) {
 		//message.textContent = ' A DJ needs to be selected first.';
 		showFeedback('warning', 'A DJ needs to be selected first.');
 	} else {
-		const currentDJ = djs.find(dj => dj.id == djId);
+		const timeSlots = [];
 		
-		// save time slots
-		currentDJ.clearTimeSlots();
-		for (slot of timeSlotsSection.querySelectorAll('input:checked')) {
-			currentDJ.addTimeSlot(slot.value);
+		for (let i = 0; i < daysOfWeek.length; i++) {
+			let timeStart = -1;
+			let prevTimeRange;
+			for (let j = 0; j < 48; j++) {
+				const timeRange = offsetToTimeRange(j);
+				const slot = timeSlotsSection.querySelector(`[value="${daysOfWeek[i]}-${timeRange}"]`);
+				
+				if (slot.checked && timeStart === -1) {
+					timeStart = startFromTimeRange(timeRange);
+				} else if (!slot.checked && timeStart !== -1) {
+					timeSlots.push({
+						day: `4/${7 + i}/2024`, // dummy date
+						start: timeStart,
+						end: endFromTimeRange(prevTimeRange)
+					});
+					timeStart = -1;
+				}
+				
+				prevTimeRange = timeRange;
+			}
 		}
 		
-		showFeedback('success', `Successfully updated time slots for ${currentDJ.firstName} ${currentDJ.lastName}.`);
+		fetch('/api/timeslots/djs', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				id: djId,
+				slots: timeSlots
+			})
+		})
+		.then(res => res.json())
+		.then(data => showFeedback(data.type, data.message));
+		
 	}
 	
 	e.preventDefault();
 }
 
+function timeToOffset(t) {
+	return 2 * Math.trunc(t / 100) + !!(t % 100);
+}
+
+function offsetToTimeRange(i) {
+	let firstHr, secondHr, firstMin, secondMin;
+	
+	if (i == 47) {
+		firstHr = 23;
+		secondHr = 0;
+		firstMin = '30';
+		secondMin = '00';
+	} else {
+		firstHr = Math.trunc(i / 2);
+		secondHr = Math.trunc((i+1) / 2);
+		firstMin = (i % 2) ? '30' : '00';
+		secondMin = ((i+1) % 2) ? '30' : '00';
+	}
+	
+	firstHr = firstHr.toString().padStart(2, '0');
+	secondHr = secondHr.toString().padStart(2, '0');
+	return `${firstHr}${firstMin}-${secondHr}${secondMin}`;
+}
+
+function startFromTimeRange(tr) {
+	return tr.substring(0, 2) + ':' + tr.substring(2, 4);
+}
+
+function endFromTimeRange(tr) {
+	return tr.substring(5, 7) + ':' + tr.substring(7, 9);
+}
+
 function updateInfo() {
-	const djId = document.getElementById('dj').value;
-	fetch(`/api/djs/${djId}`)
+	const djSelectionBar = document.getElementById('dj');
+	const djId = djSelectionBar.value;
+	const djName = djSelectionBar.options[djSelectionBar.selectedIndex].text;
+	
+	fetch(`/api/timeslots/djs/${djId}`)
 	.then(res => res.json())
 	.then(data => {
-		console.log(data);
-		showFeedback('info', `${data.name}'s time slot selected`);
+		// clear previous checked time slots
+		for (slot of timeSlotsSection.querySelectorAll('input:checked')) {
+			slot.click();
+		}
+		
+		// this clears previous conflicting time slots, but due to time constraints the handling is left unimplemented
+		/*
+		for (slot of timeSlotsSection.querySelectorAll('input:disabled')) {
+			slot.removeAttribute('disabled');
+		}
+		*/
+		
+		// then display current time slots of the selected DJ
+		for (slot of data) {
+			const day = daysOfWeek[new Date(slot.Timeslot.day).getDay()];
+			const timeStart = slot.Timeslot.start.replace(':', '');
+			const timeEnd = slot.Timeslot.end.replace(':', '');
+			
+			// select all timeslots from timeStart to timeEnd given a day
+			for (let i = timeToOffset(timeStart); i < timeToOffset(timeEnd); i++) {
+				const timeRange = offsetToTimeRange(i);
+				timeSlotsSection.querySelector(`[value="${day}-${timeRange}"]`).click();
+			}
+			
+		}
+		
+		showFeedback('success', `${djName} selected`);
 	})
 	.catch(() => showFeedback('error', `Failed to retrieve DJ with id ${djId}. The DJ may not exist.`));
-	/* test */
-	let currDJ;
-	
-	// clear previous checked time slots
-	for (slot of timeSlotsSection.querySelectorAll('input:checked')) {
-		slot.click();
-	}
-	
-	// clear previous conflicting time slots
-	for (slot of timeSlotsSection.querySelectorAll('input:disabled')) {
-		slot.removeAttribute('disabled');
-	}
-	
-	// then display current time sltos of the selected DJ
-	// + disallow conflicting time slots
-	for (dj of djs) {
-		const timeSlots = dj.getTimeSlots();
-		
-		if (dj.id == djId) {
-			currDJ = dj;
-			for (slot of timeSlots) {
-				timeSlotsSection.querySelector(`[value="${slot}"]`).click();
-			}
-		} else {
-			for (slot of timeSlots) {
-				timeSlotsSection.querySelector(`[value="${slot}"]`).disabled = true;
-			}
-		}
-	}
 	
 	// update reports
 	document.getElementById('dj-reports-aow').textContent = `Artist of the Week: ${currDJ.popularArtist}`;

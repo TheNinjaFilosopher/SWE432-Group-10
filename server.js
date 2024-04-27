@@ -85,8 +85,41 @@ app.get('/api/timeslots', (req, res) => {
 
 app.get('/api/timeslots/djs/:id', (req, res) => {
 	mongoClient.db("RadioStation").collection("Playlists")
-	.findOne({'DJ._id': new ObjectId(req.params.id)}, {projection: {Timeslot: 1}})
-	.then(data => res.json(data));
+	//.findOne({'DJ._id': req.params.id}, {projection: {Timeslot: 1}})
+	.find({'DJ._id': req.params.id}).project({Timeslot: 1}).toArray()
+	//.then(data => res.json(data));
+	.then(data => res.json(JSON.parse(JSON.stringify(data))));
+});
+
+// FIXME this is buggy if a timeslot is deleted in the beginning or middle of a range of a day!!
+app.post('/api/timeslots/djs', (req, res) => {
+	const timeSlots = req.body.slots;
+	const playLists = mongoClient.db("RadioStation").collection("Playlists");
+	
+	const newSlots = timeSlots.map(slot => ({
+		updateOne: {
+			filter: {
+				'DJ._id': req.body.id,
+				'Timeslot.start': slot.start
+			},
+			update: {
+				$set: {
+					"Timeslot.day": slot.day,
+					"Timeslot.start": slot.start,
+					"Timeslot.end": slot.end
+				}
+			},
+			upsert: true // create a new document if no filter matches
+		}
+	}));
+	
+	playLists.bulkWrite(newSlots)
+	.then(() => {
+		res.json({type: 'success', message: 'Timeslots updated'});
+	})
+	.catch(() => {
+		res.json({type: 'error', message: 'Failed to update timeslots'});
+	});
 });
 
 app.get('/api/songs', (req, res) => {
